@@ -2,6 +2,7 @@ package com.logiconets.c196_nick_albers;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -49,10 +50,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickDisplayTerms(View view) {
-        testTerms();
+
+     //   testTerms();
+
+        startActivity(new Intent(MainActivity.this, TermsActivity.class));
     }
 
     public void onClickDisplayCourses(View view) {
         testCourses();
+
+        startActivity(new Intent(MainActivity.this, CoursesActivity.class));
     }
 }
