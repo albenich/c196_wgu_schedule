@@ -3,11 +3,13 @@ package com.logiconets.c196_nick_albers;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import com.logiconets.c196_nick_albers.model.Course;
 import com.logiconets.c196_nick_albers.model.Term;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 
@@ -17,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
+    private void testTerms(){
         Term t1 = new Term();
         t1.setTitle("Term 1");
         t1.setStartDate(Calendar.getInstance());
@@ -30,14 +34,25 @@ public class MainActivity extends AppCompatActivity {
         t2.getStartDate().add(Calendar.MONTH,4);
         t2.getEndDate().set(2020,11,1);
 
-        String t1String = t1.getTitle() + ":\nStart Date: " + t1.getStartDate().getTime().toString()
-                + "\nEnd Date: " + t1.getEndDate().getTime().toString();
-        String t2String = t2.getTitle() + ":\nStart Date: " + t2.getStartDate().getTime().toString()
-                + "\nEnd Date: " + t2.getEndDate().getTime().toString();
-        Toast.makeText(this,t1String,Toast.LENGTH_LONG).show(); //Testing Start Date
-        Toast.makeText(this,t2String,Toast.LENGTH_LONG).show(); //Testing End Date
+        Toast.makeText(this,t1.toString(),Toast.LENGTH_LONG).show(); //Testing Start Date
+        Toast.makeText(this,t2.toString(),Toast.LENGTH_LONG).show(); //Testing End Date
+    }
 
+    private void testCourses(){
+        Course c1 = new Course("Course 1",Calendar.getInstance(),Calendar.getInstance(),"In Progress"
+                ,"Dana","615-808-3843","dana.cobbs@wgu.edu",new ArrayList<String>());
+        c1.setAssessment("Objective Assessment 1");
+        c1.setAssessment("Performance Assessment 1");
+        c1.getAnticipatedEndDate().add(Calendar.MONTH,3);
 
+        Toast.makeText(this,c1.toString(),Toast.LENGTH_LONG).show();
+    }
 
+    public void onClickDisplayTerms(View view) {
+        testTerms();
+    }
+
+    public void onClickDisplayCourses(View view) {
+        testCourses();
     }
 }

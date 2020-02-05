@@ -51,8 +51,8 @@ public class Term {
     public String toString() {
         return "Term{" +
                 "title='" + title + '\'' +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
+                ", startDate=" + startDate.getTime().toString() +
+                ", endDate=" + endDate.getTime().toString() +
                 '}';
     }
 }

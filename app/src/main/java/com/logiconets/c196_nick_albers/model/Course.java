@@ -116,8 +116,8 @@ public class Course {
     public String toString() {
         return "Course{" +
                 "title='" + title + '\'' +
-                ", startDate=" + startDate +
-                ", anticipatedEndDate=" + anticipatedEndDate +
+                ", startDate=" + startDate.getTime().toString() +
+                ", anticipatedEndDate=" + anticipatedEndDate.getTime().toString() +
                 ", status='" + status + '\'' +
                 ", cmName='" + cmName + '\'' +
                 ", cmPhone='" + cmPhone + '\'' +
