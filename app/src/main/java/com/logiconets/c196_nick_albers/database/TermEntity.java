@@ -1,14 +1,12 @@
-package com.logiconets.c196_nick_albers.model;
+package com.logiconets.c196_nick_albers.database;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 @Entity(tableName = "term")
 public class TermEntity {
@@ -27,23 +25,33 @@ public class TermEntity {
     @ColumnInfo(name="endDate")
     private Date endDate;
 
-
-/*
-    private static List<TermEntity> terms = new ArrayList<>();
-
-    public static List<TermEntity> getTerms() {
-        return terms;
-    }
-
-    public static void setTerms(List<TermEntity> terms) {
-        TermEntity.terms = terms;
-    }
-
-
+    @Ignore
     public TermEntity() {
-        terms.add(this);
     }
-*/
+
+    public TermEntity(int titleId, String title, Date startDate, Date endDate) {
+        this.titleId = titleId;
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    /*
+        private static List<TermEntity> terms = new ArrayList<>();
+
+        public static List<TermEntity> getTerms() {
+            return terms;
+        }
+
+        public static void setTerms(List<TermEntity> terms) {
+            TermEntity.terms = terms;
+        }
+
+
+        public TermEntity() {
+            terms.add(this);
+        }
+    */
     public String getTitle() {
         return title;
     }

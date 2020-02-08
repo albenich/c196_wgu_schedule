@@ -1,4 +1,4 @@
-package com.logiconets.c196_nick_albers.model;
+package com.logiconets.c196_nick_albers.database;
 
 import android.content.Context;
 
@@ -12,23 +12,24 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {TermEntity.class}, version=1, exportSchema = false)
+@Database(entities = {TermEntity.class}, version=1)
 @TypeConverters({Converters.class})
-public abstract class TermRoomDatabase extends RoomDatabase {
+public abstract class AppDatabase extends RoomDatabase {
 
+    public static final String DATABASE_NAME = "Database.db";
     public abstract TermDAO termDAO();
 
-    private static volatile TermRoomDatabase INSTANCE;
+    private static volatile AppDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
     static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
-    static TermRoomDatabase getDatabase(final Context context) {
+    static AppDatabase getDatabase(final Context context) {
         if(INSTANCE == null) {
-            synchronized (TermRoomDatabase.class){
+            synchronized (AppDatabase.class){
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            TermRoomDatabase.class, "term_database").build();
+                            AppDatabase.class, DATABASE_NAME).build();
                 }
             }
         }

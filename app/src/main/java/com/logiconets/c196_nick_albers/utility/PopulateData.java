@@ -1,15 +1,12 @@
 package com.logiconets.c196_nick_albers.utility;
 
-import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.logiconets.c196_nick_albers.model.CourseEntity;
-import com.logiconets.c196_nick_albers.model.TermEntity;
+import com.logiconets.c196_nick_albers.database.CourseEntity;
+import com.logiconets.c196_nick_albers.database.TermEntity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 

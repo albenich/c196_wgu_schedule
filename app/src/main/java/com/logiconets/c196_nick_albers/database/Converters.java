@@ -1,8 +1,7 @@
-package com.logiconets.c196_nick_albers.model;
+package com.logiconets.c196_nick_albers.database;
 
 import androidx.room.TypeConverter;
 
-import java.util.Calendar;
 import java.util.Date;
 
 public class Converters {

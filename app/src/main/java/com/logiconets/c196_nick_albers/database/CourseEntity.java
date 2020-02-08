@@ -1,7 +1,6 @@
-package com.logiconets.c196_nick_albers.model;
+package com.logiconets.c196_nick_albers.database;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 

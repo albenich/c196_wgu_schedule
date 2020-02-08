@@ -1,10 +1,9 @@
 package com.logiconets.c196_nick_albers;
 
+import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.logiconets.c196_nick_albers.model.TermEntity;
+import com.logiconets.c196_nick_albers.database.TermEntity;
 import com.logiconets.c196_nick_albers.ui.TermListAdapter;
 import com.logiconets.c196_nick_albers.utility.PopulateData;
 
@@ -13,14 +12,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.View;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class TermsActivity extends AppCompatActivity {
 
@@ -28,6 +25,15 @@ public class TermsActivity extends AppCompatActivity {
 
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
+
+    @OnClick(R.id.newTermFab)
+    void fabClickHandler(){
+        Intent intent = new Intent(this, EditorActivity.class);
+        startActivity(intent);
+    }
+
+    private List<TermEntity> termData = new ArrayList<>();
+    private TermListAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +50,8 @@ public class TermsActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 */
-        FloatingActionButton fab = findViewById(R.id.newTermFab);
-        fab.setOnClickListener(new View.OnClickListener() {
+/*        FloatingActionButton fab = findViewById(R.id.newTermFab);
+       fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.i("TermActivity",PopulateData.getTerms().toString());
@@ -54,11 +60,16 @@ public class TermsActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+*/
     }
 
     private void initRecyclerView(){
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
+        termData = PopulateData.getTerms();
+
+        mAdapter = new TermListAdapter(termData,this);
+        mRecyclerView.setAdapter(mAdapter);
     }
 }
