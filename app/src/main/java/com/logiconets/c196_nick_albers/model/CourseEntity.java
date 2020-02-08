@@ -5,23 +5,23 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class Course {
+public class CourseEntity {
     private String title;
-    private Calendar startDate;
-    private Calendar anticipatedEndDate;
+    private Date startDate;
+    private Date anticipatedEndDate;
     private String status;
     private String cmName;
     private String cmPhone;
     private String cmEmail;
     private List<String> assessments;
-    private static List<Course> courses = new ArrayList<>();
+    private static List<CourseEntity> courses = new ArrayList<>();
 
-    public Course() {
+    public CourseEntity() {
         assessments = new ArrayList<>();
         courses.add(this);
     }
 
-    public Course(String title, Calendar startDate, Calendar anticipatedEndDate, String status, String cmName, String cmPhone, String cmEmail, List<String> assessments) {
+    public CourseEntity(String title, Date startDate, Date anticipatedEndDate, String status, String cmName, String cmPhone, String cmEmail, List<String> assessments) {
         this.title = title;
         this.startDate = startDate;
         this.anticipatedEndDate = anticipatedEndDate;
@@ -32,12 +32,12 @@ public class Course {
         this.assessments = assessments;
     }
 
-    public static List<Course> getCourses() {
+    public static List<CourseEntity> getCourses() {
         return courses;
     }
 
-    public static void setCourses(List<Course> courses) {
-        Course.courses = courses;
+    public static void setCourses(List<CourseEntity> courses) {
+        CourseEntity.courses = courses;
     }
 
     public String getTitle() {
@@ -48,19 +48,19 @@ public class Course {
         this.title = title;
     }
 
-    public Calendar getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Calendar startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    public Calendar getAnticipatedEndDate() {
+    public Date getAnticipatedEndDate() {
         return anticipatedEndDate;
     }
 
-    public void setAnticipatedEndDate(Calendar anticipatedEndDate) {
+    public void setAnticipatedEndDate(Date anticipatedEndDate) {
         this.anticipatedEndDate = anticipatedEndDate;
     }
 
@@ -114,10 +114,10 @@ public class Course {
 
     @Override
     public String toString() {
-        return "Course{" +
+        return "CourseEntity{" +
                 "title='" + title + '\'' +
-                ", startDate=" + startDate.getTime().toString() +
-                ", anticipatedEndDate=" + anticipatedEndDate.getTime().toString() +
+                ", startDate=" + startDate.getTime() +
+                ", anticipatedEndDate=" + anticipatedEndDate.getTime() +
                 ", status='" + status + '\'' +
                 ", cmName='" + cmName + '\'' +
                 ", cmPhone='" + cmPhone + '\'' +
