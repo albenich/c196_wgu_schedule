@@ -24,8 +24,6 @@ import butterknife.OnClick;
 
 public class TermsActivity extends AppCompatActivity {
 
-    List<TermEntity> terms = new ArrayList<>();
-
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
 

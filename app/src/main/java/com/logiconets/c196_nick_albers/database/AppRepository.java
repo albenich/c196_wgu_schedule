@@ -24,21 +24,23 @@ public class AppRepository {
     }
 
     private AppRepository(Context context) {
-        mTerms = PopulateData.getTerms();
+        //mTerms = PopulateData.getTerms();
         mDb = AppDatabase.getDatabase(context);
     }
 
     public void addSampleData() {
+        mTerms = PopulateData.getTerms();
         executor.execute(new Runnable() {
             @Override
             public void run() {
                 Log.i("AppRepo","Inserting terms into Db");
-                mDb.termDAO().insertAll(PopulateData.getTerms());
+                mDb.termDAO().insertAll(mTerms);
             }
         });
     }
 
     public void deleteData() {
+        mTerms.clear();
         executor.execute(new Runnable() {
             @Override
             public void run() {
