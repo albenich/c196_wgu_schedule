@@ -6,9 +6,12 @@ import android.os.Bundle;
 import com.logiconets.c196_nick_albers.database.TermEntity;
 import com.logiconets.c196_nick_albers.ui.TermListAdapter;
 import com.logiconets.c196_nick_albers.utility.PopulateData;
+import com.logiconets.c196_nick_albers.viewmodel.TermViewModel;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,6 +37,7 @@ public class TermsActivity extends AppCompatActivity {
 
     private List<TermEntity> termData = new ArrayList<>();
     private TermListAdapter mAdapter;
+    private TermViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,31 +47,22 @@ public class TermsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         ButterKnife.bind(this);
+        initViewModel();
         initRecyclerView();
 
- /*       RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        final TermListAdapter adapter = new TermListAdapter(this);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-*/
-/*        FloatingActionButton fab = findViewById(R.id.newTermFab);
-       fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i("TermActivity",PopulateData.getTerms().toString());
-                    Snackbar.make(view, PopulateData.getTerms().toString(), Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-            }
-        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-*/
+
+    }
+
+    private void initViewModel() {
+        mViewModel = new ViewModelProvider(this).get(TermViewModel.class);
     }
 
     private void initRecyclerView(){
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
-        termData = PopulateData.getTerms();
+        termData = mViewModel.mTerms;
 
         mAdapter = new TermListAdapter(termData,this);
         mRecyclerView.setAdapter(mAdapter);

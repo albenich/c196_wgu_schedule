@@ -43,6 +43,35 @@
             android:layout_height="wrap_content"
             android:text="Courses"
             android:onClick="onClickDisplayCourses"/>
+
+
     </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addSampleDataFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_margin="8dp"
+        app:srcCompat="@drawable/ic_cake"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:onClick="onClickAddSampleData"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/deleteDataFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:srcCompat="@android:drawable/btn_dialog"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="8dp"
+        android:onClick="onClickDeleteData"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
