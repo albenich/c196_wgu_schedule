@@ -36,6 +36,13 @@ public class TermEntity {
         this.endDate = endDate;
     }
 
+    @Ignore
+    public TermEntity(String title, Date startDate, Date endDate) {
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
     /*
         private static List<TermEntity> terms = new ArrayList<>();
 

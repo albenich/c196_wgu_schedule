@@ -1,6 +1,7 @@
 package com.logiconets.c196_nick_albers.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.logiconets.c196_nick_albers.EditorActivity;
 import com.logiconets.c196_nick_albers.R;
 import com.logiconets.c196_nick_albers.database.TermEntity;
 
@@ -15,6 +18,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.logiconets.c196_nick_albers.utility.Constants.TERM_ID_KEY;
 
 public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.TermViewHolder> {
 
@@ -32,6 +37,8 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.TermVi
 
         @BindView(R.id.termTextView)
         TextView mTextView;
+        @BindView(R.id.fab)
+        FloatingActionButton mFab;
 
 
         public TermViewHolder(View itemView){
@@ -65,6 +72,15 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.TermVi
 
         final TermEntity term = mTerms.get(position);
         holder.mTextView.setText(term.getTitle());
+
+        holder.mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, EditorActivity.class);
+                intent.putExtra(TERM_ID_KEY, term.getTitleId());
+                mContext.startActivity(intent);
+            }
+        });
         /*        if (mTerms != null) {
             TermEntity current = mTerms.get(position);
             holder.termItemView.setText(current.getTitle());

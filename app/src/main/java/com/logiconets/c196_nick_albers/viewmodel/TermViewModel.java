@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import com.logiconets.c196_nick_albers.database.AppRepository;
 import com.logiconets.c196_nick_albers.database.TermEntity;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class TermViewModel extends AndroidViewModel {
 
-    public List<TermEntity> mTerms;
+    public LiveData<List<TermEntity>> mTerms;
     private AppRepository mRepository;
 
     public TermViewModel(@NonNull Application application) {

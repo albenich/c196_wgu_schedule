@@ -14,12 +14,6 @@ public class MainActivity extends AppCompatActivity {
 
     private AppRepository mRepository;
 
-/*(    @OnClick(R.id.addSampleDataFab)
-    void fabClickHandler(){
-        addSampleData();
-        Log.i("MainActivity", "Clicking Fab button");
-    }
-*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -97,4 +97,6 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
+    <string name="new_term">New Term</string>
+    <string name="edit_note">Edit note</string>
 </resources>
