@@ -12,64 +12,66 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.logiconets.c196_nick_albers.EditorActivity;
 import com.logiconets.c196_nick_albers.R;
-import com.logiconets.c196_nick_albers.database.TermEntity;
+import com.logiconets.c196_nick_albers.database.CourseEntity;
+
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.logiconets.c196_nick_albers.utility.Constants.TERM_ID_KEY;
+import static com.logiconets.c196_nick_albers.utility.Constants.COURSE_ID_KEY;
 
-public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.TermViewHolder> {
+public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.CourseViewHolder> {
 
-    private final List<TermEntity> mTerms;
+    private final List<CourseEntity> mCourses;
     private final Context mContext;
     private final LayoutInflater mInflater;
 
-    public TermListAdapter(List<TermEntity> mTerms, Context mContext) {
-        this.mTerms = mTerms;
+    public CourseListAdapter(List<CourseEntity> mCourses, Context mContext) {
+        this.mCourses = mCourses;
         this.mContext = mContext;
         this.mInflater = LayoutInflater.from(mContext);
     }
 
-    public class TermViewHolder extends RecyclerView.ViewHolder {
+    public class CourseViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.termTextView)
-        TextView mTextView;
-        @BindView(R.id.fab)
+        @BindView(R.id.courseTextView)
+        TextView mCourseView;
+
+        @BindView(R.id.courseFab)
         FloatingActionButton mFab;
 
 
-        public TermViewHolder(View itemView){
+        public CourseViewHolder(View itemView){
             super(itemView);
             ButterKnife.bind(this,itemView);
         }
     }
 
     @Override
-    public TermViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = mInflater.inflate(R.layout.term_list_item, parent, false);
-        return new TermViewHolder(itemView);
+    public CourseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = mInflater.inflate(R.layout.course_list_item, parent, false);
+        return new CourseViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(TermViewHolder holder, int position) {
+    public void onBindViewHolder(CourseViewHolder holder, int position) {
 
-        final TermEntity term = mTerms.get(position);
-        holder.mTextView.setText(term.getTitle());
+        final CourseEntity course = mCourses.get(position);
+        holder.mCourseView.setText(course.getTitle());
 
         holder.mFab.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, EditorActivity.class);
-            intent.putExtra(TERM_ID_KEY, term.getTitleId());
+            intent.putExtra(COURSE_ID_KEY, course.getCourseId());
             mContext.startActivity(intent);
         });
     }
 
     @Override
     public int getItemCount() {
-        if (mTerms != null)
-            return mTerms.size();
+        if (mCourses != null)
+            return mCourses.size();
         else return 0;
     }
 }

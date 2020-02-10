@@ -10,25 +10,26 @@ import androidx.room.Query;
 import java.util.List;
 
 @Dao
-public interface TermDAO {
+public interface CourseDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(TermEntity term);
+    void insert(CourseEntity course);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(List<TermEntity> terms);
+    void insertAll(List<CourseEntity> course);
 
     @Delete
-    void deleteTerm(TermEntity term);
+    void deleteCourse(CourseEntity course);
 
-    @Query("DELETE FROM term")
+    @Query("DELETE FROM course")
     void deleteAll();
 
-    @Query("SELECT * from term ORDER BY title DESC")
-    LiveData<List<TermEntity>> getAll();
+    @Query("SELECT * from course ORDER BY title DESC")
+    LiveData<List<CourseEntity>> getAll();
 
-    @Query("SELECT * from term WHERE id = :id")
-    TermEntity getTermById(int id);
+    @Query("SELECT * from course WHERE id = :id")
+    CourseEntity getCourseById(int id);
 
-    @Query("SELECT COUNT(*) FROM term")
+    @Query("SELECT COUNT(*) FROM course")
     int getCount();
+
 }

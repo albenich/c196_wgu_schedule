@@ -38,8 +38,8 @@ public class PopulateData {
             terms.add(t1);
             terms.add(t2);
         }
-        Log.i("PopulateDate", "Added t1 " + t1.getTitle());
-        Log.i("PopulateDate", "Added t2 " + t2.getTitle());
+    //    Log.i("PopulateDate", "Added t1 " + t1.getTitle());
+    //    Log.i("PopulateDate", "Added t2 " + t2.getTitle());
     }
 
     private static void initCourses(){
@@ -48,10 +48,8 @@ public class PopulateData {
 
         startCourse.set(2020,3,1);
         endCourse.set(2020,6,25);
-        CourseEntity c1 = new CourseEntity("CourseEntity 1",startCourse.getTime(),endCourse.getTime(),"In Progress"
-                ,"Dana","615-808-3843","dana.cobbs@wgu.edu",new ArrayList<String>());
-        c1.setAssessment("Objective Assessment 1");
-        c1.setAssessment("Performance Assessment 1");
+        CourseEntity c1 = new CourseEntity(1,"CourseEntity 1",startCourse.getTime(),endCourse.getTime(),"In Progress"
+                ,"Dana","615-808-3843","dana.cobbs@wgu.edu","");
 
         if(courses.isEmpty())
             courses.add(c1);

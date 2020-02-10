@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData;
 
 import com.logiconets.c196_nick_albers.utility.PopulateData;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -16,6 +15,7 @@ public class AppRepository {
     private static AppRepository ourInstance;
 
     public LiveData<List<TermEntity>> mTerms;
+    public LiveData<List<CourseEntity>> mCourses;
     private AppDatabase mDb;
     private Executor executor = Executors.newSingleThreadExecutor();
 
@@ -29,7 +29,8 @@ public class AppRepository {
     private AppRepository(Context context) {
         //mTerms = PopulateData.getTerms();
         mDb = AppDatabase.getDatabase(context);
-        mTerms = getAllNotes();
+        mTerms = getAllTerms();
+        mCourses = getAllCourses();
         Log.i("AppRepository",mTerms == null ? "Empty mTerms" : "mTerms Populated!");
     }
 
@@ -39,21 +40,20 @@ public class AppRepository {
             public void run() {
                 Log.i("AppRepo","Inserting terms into Db");
                 mDb.termDAO().insertAll(PopulateData.getTerms());
+                mDb.courseDAO().insertAll(PopulateData.getCourses());
             }
         });
     }
 
     public void deleteData() {
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                Log.i("AppRepo", "Deleting everything!");
-                mDb.termDAO().deleteAll();
-            }
+        executor.execute(() -> {
+            Log.i("AppRepo", "Deleting everything!");
+            mDb.termDAO().deleteAll();
+            mDb.courseDAO().deleteAll();
         });
     }
-
-    private LiveData<List<TermEntity>> getAllNotes(){
+//Modules for TermEntity Querying
+    private LiveData<List<TermEntity>> getAllTerms(){
         return mDb.termDAO().getAll();
     }
 
@@ -62,11 +62,17 @@ public class AppRepository {
     }
 
     public void insertTerm(final TermEntity term) {
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                mDb.termDAO().insert(term);
-            }
-        });
+        executor.execute(() -> mDb.termDAO().insert(term));
+    }
+
+//Modules for CourseEntity Querying
+    private LiveData<List<CourseEntity>> getAllCourses() { return mDb.courseDAO().getAll(); }
+
+    public CourseEntity getCourseById(int courseId) {
+        return mDb.courseDAO().getCourseById(courseId);
+    }
+
+    public void insertCourse(final CourseEntity course) {
+        executor.execute(() -> mDb.courseDAO().insert(course));
     }
 }
