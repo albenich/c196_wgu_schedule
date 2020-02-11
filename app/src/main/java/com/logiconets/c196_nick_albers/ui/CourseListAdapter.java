@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.logiconets.c196_nick_albers.CourseEditorActivity;
-import com.logiconets.c196_nick_albers.EditorActivity;
 import com.logiconets.c196_nick_albers.R;
 import com.logiconets.c196_nick_albers.database.CourseEntity;
 

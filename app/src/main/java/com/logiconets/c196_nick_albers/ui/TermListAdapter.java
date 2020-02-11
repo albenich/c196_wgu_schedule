@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.logiconets.c196_nick_albers.EditorActivity;
+import com.logiconets.c196_nick_albers.TermEditorActivity;
 import com.logiconets.c196_nick_albers.R;
 import com.logiconets.c196_nick_albers.database.TermEntity;
 
@@ -60,7 +60,7 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.TermVi
         holder.mTextView.setText(term.getTitle());
 
         holder.mFab.setOnClickListener(v -> {
-            Intent intent = new Intent(mContext, EditorActivity.class);
+            Intent intent = new Intent(mContext, TermEditorActivity.class);
             intent.putExtra(TERM_ID_KEY, term.getTitleId());
             mContext.startActivity(intent);
         });

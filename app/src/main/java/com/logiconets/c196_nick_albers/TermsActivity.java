@@ -5,14 +5,12 @@ import android.os.Bundle;
 
 import com.logiconets.c196_nick_albers.database.TermEntity;
 import com.logiconets.c196_nick_albers.ui.TermListAdapter;
-import com.logiconets.c196_nick_albers.utility.PopulateData;
 import com.logiconets.c196_nick_albers.viewmodel.TermViewModel;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,7 +28,7 @@ public class TermsActivity extends AppCompatActivity {
 
     @OnClick(R.id.newTermFab)
     void fabClickHandler(){
-        Intent intent = new Intent(this, EditorActivity.class);
+        Intent intent = new Intent(this, TermEditorActivity.class);
         startActivity(intent);
     }
 
