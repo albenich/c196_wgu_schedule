@@ -10,6 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".CourseEditorActivity"
+            android:label="@string/title_activity_couse_editor"
+            android:parentActivityName=".CoursesActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.logiconets.c196_nick_albers.CoursesActivity" />
+        </activity>
+        <activity
             android:name=".EditorActivity"
             android:label="@string/title_activity_editor"
             android:parentActivityName=".TermsActivity"

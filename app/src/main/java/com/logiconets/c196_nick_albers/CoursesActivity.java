@@ -28,7 +28,7 @@ public class CoursesActivity extends AppCompatActivity {
 
     @OnClick(R.id.newCourseFab)
     void fabClickHandler(){
-        Intent intent = new Intent(this, EditorActivity.class);
+        Intent intent = new Intent(this, CourseEditorActivity.class);
         startActivity(intent);
     }
 

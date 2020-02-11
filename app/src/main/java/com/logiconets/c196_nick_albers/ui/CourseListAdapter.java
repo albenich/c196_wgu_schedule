@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.logiconets.c196_nick_albers.CourseEditorActivity;
 import com.logiconets.c196_nick_albers.EditorActivity;
 import com.logiconets.c196_nick_albers.R;
 import com.logiconets.c196_nick_albers.database.CourseEntity;
@@ -62,7 +63,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         holder.mCourseView.setText(course.getTitle());
 
         holder.mFab.setOnClickListener(v -> {
-            Intent intent = new Intent(mContext, EditorActivity.class);
+            Intent intent = new Intent(mContext, CourseEditorActivity.class);
             intent.putExtra(COURSE_ID_KEY, course.getCourseId());
             mContext.startActivity(intent);
         });

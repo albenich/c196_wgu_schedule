@@ -57,6 +57,17 @@ public class CourseEntity {
     }
 
     @Ignore
+    public CourseEntity(String title, Date startDate, Date anticipatedEndDate, String status, String cmName, String cmPhone, String cmEmail, String notes) {
+        this.title = title;
+        this.startDate = startDate;
+        this.anticipatedEndDate = anticipatedEndDate;
+        this.status = status;
+        this.cmName = cmName;
+        this.cmPhone = cmPhone;
+        this.cmEmail = cmEmail;
+        this.notes = notes;
+    }
+    @Ignore
     public CourseEntity() {
     }
 
