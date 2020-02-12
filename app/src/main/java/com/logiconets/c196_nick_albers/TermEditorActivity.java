@@ -1,5 +1,6 @@
 package com.logiconets.c196_nick_albers;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 
 import com.logiconets.c196_nick_albers.viewmodel.TermEditorViewModel;
@@ -10,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.DatePicker;
 import android.widget.TextView;
 
 import java.text.ParseException;
@@ -20,6 +22,7 @@ import java.util.GregorianCalendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.logiconets.c196_nick_albers.utility.Constants.TERM_ID_KEY;
 
@@ -33,6 +36,11 @@ public class TermEditorActivity extends AppCompatActivity {
 
     @BindView(R.id.term_endDate)
     TextView mEndDate;
+
+    final Calendar calendar = Calendar.getInstance();
+    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+
+    TextView mSelected;
 
     private TermEditorViewModel mViewModel;
     private boolean mNewTerm;
@@ -99,32 +107,46 @@ public class TermEditorActivity extends AppCompatActivity {
         Calendar startCalendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         mViewModel.saveTerm(mTitle.getText().toString(),sdf.parse(mStartDate.getText().toString()),
-                sdf.parse(mEndDate.getText().toString()));
+        sdf.parse(mEndDate.getText().toString()));
         finish();
     }
 
-/*    @OnClick(R.id.term_startDate)
-    public void onClickStartDate(){
-        final Calendar calendar = Calendar.getInstance();
-        DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                calendar.set(Calendar.YEAR, year);
-                calendar.set(Calendar.MONTH, month);
-                calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
-                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+    DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            calendar.set(Calendar.YEAR, year);
+            calendar.set(Calendar.MONTH, month);
+            calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
 
-                startDate.setText(sdf.format(calendar.getTime()));
-            }
-        };
-        if(calendar == null) {
-            new DatePickerDialog(getApplication().getApplicationContext(), date, 1990, 0, 1).show();
+            mSelected.setText(sdf.format(calendar.getTime()));
         }
-        else{
-            new DatePickerDialog(getApplication().getApplicationContext(), date, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
-        }
+    };
 
+    @OnClick(R.id.term_startDate)
+    public void onClickStartDate() {
+        mSelected = mStartDate;
+        try {
+            calendar.setTime(sdf.parse(mStartDate.getText().toString()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        new DatePickerDialog(TermEditorActivity.this,date,calendar.get(Calendar.YEAR),
+                  calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
-*/
+
+    @OnClick(R.id.term_endDate)
+    public void onClickEndDate() {
+        mSelected = mEndDate;
+        try {
+            calendar.setTime(sdf.parse(mEndDate.getText().toString()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        new DatePickerDialog(TermEditorActivity.this,date,calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
 
 }
+
+
+
