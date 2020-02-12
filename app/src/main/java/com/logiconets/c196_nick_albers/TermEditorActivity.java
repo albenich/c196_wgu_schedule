@@ -1,6 +1,5 @@
 package com.logiconets.c196_nick_albers;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 
 import com.logiconets.c196_nick_albers.viewmodel.TermEditorViewModel;
@@ -9,25 +8,31 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.TextView;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 import static com.logiconets.c196_nick_albers.utility.Constants.TERM_ID_KEY;
 
 public class TermEditorActivity extends AppCompatActivity {
 
     @BindView(R.id.term_title)
-    TextView mTextView;
+    TextView mTitle;
+
+    @BindView(R.id.term_startDate)
+    TextView mStartDate;
+
+    @BindView(R.id.term_endDate)
+    TextView mEndDate;
 
     private TermEditorViewModel mViewModel;
     private boolean mNewTerm;
@@ -49,8 +54,12 @@ public class TermEditorActivity extends AppCompatActivity {
     private void initViewModel(){
         mViewModel = new ViewModelProvider(this).get(TermEditorViewModel.class);
 
-        mViewModel.mLiveTerm.observe(this, termEntity ->
-                mTextView.setText(termEntity.getTitle()));
+        mViewModel.mLiveTerm.observe(this, termEntity ->{
+            mTitle.setText(termEntity.getTitle());
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+            mStartDate.setText(sdf.format(termEntity.getStartDate()));
+            mEndDate.setText(sdf.format(termEntity.getEndDate()));
+            });
 
         Bundle extras = getIntent().getExtras();
         if(extras == null) {
@@ -67,7 +76,11 @@ public class TermEditorActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         if(item.getItemId() == android.R.id.home){
-            saveAndReturn();
+            try {
+                saveAndReturn();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -75,11 +88,18 @@ public class TermEditorActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        saveAndReturn();
+        try {
+            saveAndReturn();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void saveAndReturn() {
-        mViewModel.saveTerm(mTextView.getText().toString());
+    private void saveAndReturn() throws ParseException {
+        Calendar startCalendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        mViewModel.saveTerm(mTitle.getText().toString(),sdf.parse(mStartDate.getText().toString()),
+                sdf.parse(mEndDate.getText().toString()));
         finish();
     }
 
