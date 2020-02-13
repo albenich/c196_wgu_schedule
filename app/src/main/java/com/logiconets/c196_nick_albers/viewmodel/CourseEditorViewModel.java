@@ -32,17 +32,25 @@ public class CourseEditorViewModel extends AndroidViewModel {
         });
     }
 
-    public void saveCourse(String CourseText) {
+    public void saveCourse(String CourseText,Date startDate, Date endDate, String status, String cmName,
+                           String cmEmail, String cmPhone, String notes) {
         CourseEntity course = mLiveCourse.getValue();
 
         if(course == null){
             if(TextUtils.isEmpty(CourseText.trim())){
                 return;
             }
-            course = new CourseEntity(CourseText.trim(),new Date(), new Date(),"Registered",
-            "Dana Cobbs","8909898989","dana.cobbs@wgu.edu","");
+            course = new CourseEntity(CourseText.trim(),new Date(), new Date(),"",
+            "","","","");
         }else{
             course.setTitle(CourseText.trim());
+            course.setStartDate(startDate);
+            course.setAnticipatedEndDate(endDate);
+            course.setStatus(status.trim());
+            course.setCmName(cmName.trim());
+            course.setCmEmail(cmEmail.trim());
+            course.setCmPhone(cmPhone.trim());
+            course.setNotes(notes.trim());
         }
         mRepository.insertCourse(course);
     }

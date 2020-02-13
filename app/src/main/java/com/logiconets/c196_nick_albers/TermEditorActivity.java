@@ -64,7 +64,6 @@ public class TermEditorActivity extends AppCompatActivity {
 
         mViewModel.mLiveTerm.observe(this, termEntity ->{
             mTitle.setText(termEntity.getTitle());
-            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
             mStartDate.setText(sdf.format(termEntity.getStartDate()));
             mEndDate.setText(sdf.format(termEntity.getEndDate()));
             });
@@ -104,8 +103,6 @@ public class TermEditorActivity extends AppCompatActivity {
     }
 
     private void saveAndReturn() throws ParseException {
-        Calendar startCalendar = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         mViewModel.saveTerm(mTitle.getText().toString(),sdf.parse(mStartDate.getText().toString()),
         sdf.parse(mEndDate.getText().toString()));
         finish();
