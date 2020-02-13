@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,11 +8,234 @@
     tools:context=".CourseEditorActivity"
     tools:showIn="@layout/activity_course_editor">
 
-    <EditText
-        android:id="@+id/course_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:hint="Enter Course Title"/>
+    <TextView
+        android:id="@+id/title_textView"
+        android:layout_width="105dp"
+        android:layout_height="44dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Course Title"
+        android:gravity="center"
+        tools:layout_editor_absoluteY="16dp" />
 
-</androidx.core.widget.NestedScrollView>
+    <EditText
+        android:id="@+id/course_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:inputType="textMultiLine|textCapSentences"
+        android:maxLines="2"
+        app:layout_constraintBottom_toTopOf="@+id/course_startDate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/title_textView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread_inside" />
+
+    <TextView
+        android:id="@+id/startDate_textView"
+        android:layout_width="105dp"
+        android:layout_height="44dp"
+        app:layout_constraintTop_toBottomOf="@id/course_title"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Start Date"
+        android:gravity="center"
+        android:clickable="true"
+        android:focusable="false"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <EditText
+        android:id="@+id/course_startDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:clickable="true"
+        android:focusable="false"
+        android:inputType="date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/startDate_textView"
+        app:layout_constraintTop_toBottomOf="@+id/course_title" />
+
+    <TextView
+        android:id="@+id/endDate_textView"
+        android:layout_width="105dp"
+        android:layout_height="44dp"
+        app:layout_constraintTop_toBottomOf="@id/course_startDate"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="End Date"
+        android:gravity="center"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <EditText
+        android:id="@+id/course_endDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:inputType="date"
+        android:clickable="true"
+        android:focusable="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/endDate_textView"
+        app:layout_constraintTop_toBottomOf="@+id/course_startDate" />
+
+    <TextView
+        android:id="@+id/status_textView"
+        android:layout_width="105dp"
+        android:layout_height="44dp"
+        app:layout_constraintTop_toBottomOf="@id/endDate_textView"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Status"
+        android:gravity="center"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <EditText
+        android:id="@+id/course_status"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:inputType="textCapSentences"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/status_textView"
+        app:layout_constraintTop_toBottomOf="@+id/course_endDate" />
+
+    <TextView
+        android:id="@+id/cmName_textView"
+        android:layout_width="105dp"
+        android:layout_height="44dp"
+        app:layout_constraintTop_toBottomOf="@id/course_status"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Course Mentor Name"
+        android:gravity="center"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <EditText
+        android:id="@+id/course_cmName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:inputType="textCapWords"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cmName_textView"
+        app:layout_constraintTop_toBottomOf="@+id/course_status" />
+
+    <TextView
+        android:id="@+id/cmPhone_textView"
+        android:layout_width="105dp"
+        android:layout_height="44dp"
+        app:layout_constraintTop_toBottomOf="@id/course_cmName"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Course Mentor Phone"
+        android:gravity="center"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <EditText
+        android:id="@+id/course_cmPhone"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:inputType="phone"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cmPhone_textView"
+        app:layout_constraintTop_toBottomOf="@+id/course_cmName" />
+
+    <TextView
+        android:id="@+id/cmEmail_textView"
+        android:layout_width="105dp"
+        android:layout_height="44dp"
+        app:layout_constraintTop_toBottomOf="@id/course_cmPhone"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Course Mentor Email"
+        android:gravity="center"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <EditText
+        android:id="@+id/course_cmEmail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:inputType="textEmailAddress"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cmEmail_textView"
+        app:layout_constraintTop_toBottomOf="@+id/course_cmPhone" />
+
+    <TextView
+        android:id="@+id/notes_textView"
+        android:layout_width="105dp"
+        android:layout_height="44dp"
+        app:layout_constraintTop_toBottomOf="@id/course_cmEmail"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Notes"
+        android:gravity="center"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <EditText
+        android:id="@+id/course_notes"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:inputType="textMultiLine"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/notes_textView"
+        app:layout_constraintTop_toBottomOf="@+id/course_cmEmail" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

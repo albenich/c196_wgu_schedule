@@ -21,7 +21,7 @@ import static com.logiconets.c196_nick_albers.utility.Constants.COURSE_ID_KEY;
 
 public class CourseEditorActivity extends AppCompatActivity {
 
-    @BindView(R.id.course_text)
+    @BindView(R.id.course_title)
     TextView mTextView;
 
     private CourseEditorViewModel mViewModel;

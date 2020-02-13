@@ -32,16 +32,18 @@
 
         <Button
             android:id="@+id/termsBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="200dp"
+            android:layout_height="75dp"
             android:text="Terms"
+            android:textSize="@dimen/list_text_size"
             android:onClick="onClickDisplayTerms"/>
 
         <Button
             android:id="@+id/courseBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="200dp"
+            android:layout_height="75dp"
             android:text="Courses"
+            android:textSize="@dimen/list_text_size"
             android:onClick="onClickDisplayCourses"/>
 
 
