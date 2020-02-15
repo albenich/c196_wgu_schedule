@@ -40,8 +40,8 @@ public class CourseEditorViewModel extends AndroidViewModel {
             if(TextUtils.isEmpty(CourseText.trim())){
                 return;
             }
-            course = new CourseEntity(CourseText.trim(),new Date(), new Date(),"",
-            "","","","");
+            course = new CourseEntity(CourseText.trim(),startDate, endDate,status,
+            cmName,cmPhone,cmEmail,notes);
         }else{
             course.setTitle(CourseText.trim());
             course.setStartDate(startDate);
