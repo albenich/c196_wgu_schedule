@@ -7,9 +7,11 @@ import com.logiconets.c196_nick_albers.viewmodel.CourseEditorViewModel;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ShareCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
@@ -155,5 +157,15 @@ public class CourseEditorActivity extends AppCompatActivity {
         }
         new DatePickerDialog(CourseEditorActivity.this,date,calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    public void shareNote(View view) {
+        String text = mTitle.getText().toString()
+               + " Notes: " + mNotes.getText().toString();
+        ShareCompat.IntentBuilder.from(this)
+                .setType("text/plain")
+                .setChooserTitle("Share With")
+                .setText(text)
+                .startChooser();
     }
 }

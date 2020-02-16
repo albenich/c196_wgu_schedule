@@ -224,6 +224,18 @@
         android:gravity="center"
         tools:layout_editor_absoluteY="16dp" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/shareFAB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/notes_textView"
+        app:layout_constraintStart_toStartOf="@id/notes_textView"
+        android:onClick="shareNote"
+        android:clickable="true"
+        android:focusable="false"
+        app:srcCompat="@android:drawable/ic_menu_share"
+        />
+
     <EditText
         android:id="@+id/course_notes"
         android:layout_width="0dp"

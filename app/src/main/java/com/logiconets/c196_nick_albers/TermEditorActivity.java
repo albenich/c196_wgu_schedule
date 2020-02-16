@@ -1,6 +1,9 @@
 package com.logiconets.c196_nick_albers;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.os.Bundle;
 
 import com.logiconets.c196_nick_albers.viewmodel.TermEditorViewModel;
@@ -11,8 +14,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,10 +42,14 @@ public class TermEditorActivity extends AppCompatActivity {
     @BindView(R.id.term_endDate)
     TextView mEndDate;
 
+    @BindView(R.id.notify_switch)
+    ToggleButton mNotify;
+
     final Calendar calendar = Calendar.getInstance();
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
     TextView mSelected;
+    AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
     private TermEditorViewModel mViewModel;
     private boolean mNewTerm;
@@ -105,6 +114,9 @@ public class TermEditorActivity extends AppCompatActivity {
     private void saveAndReturn() throws ParseException {
         mViewModel.saveTerm(mTitle.getText().toString(),sdf.parse(mStartDate.getText().toString()),
         sdf.parse(mEndDate.getText().toString()));
+        if(mNotify.isChecked()){
+          //  alarmManager.set(AlarmManager.RTC,sdf.parse(mStartDate.getText().toString()).getTime(),PendingIntent.getActivity(this, 0,get));
+        }
         finish();
     }
 
