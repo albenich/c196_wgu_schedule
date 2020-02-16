@@ -2,6 +2,9 @@ package com.logiconets.c196_nick_albers;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.View;
 
 
 import com.logiconets.c196_nick_albers.database.CourseEntity;
@@ -49,6 +52,14 @@ public class CoursesActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_course, menu);
+    }
+
     private void initViewModel() {
         final Observer<List<CourseEntity>> courseObserver =
                 courseEntities -> {

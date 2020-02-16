@@ -2,6 +2,8 @@ package com.logiconets.c196_nick_albers;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.View;
 
 import com.logiconets.c196_nick_albers.database.TermEntity;
 import com.logiconets.c196_nick_albers.ui.TermListAdapter;
@@ -50,6 +52,13 @@ public class TermsActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.setHeaderTitle("Settings");
+        menu.setHeaderIcon(android.R.drawable.ic_menu_more);
     }
 
     private void initViewModel() {

@@ -64,11 +64,12 @@ public class CourseEditorActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_cake);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         ButterKnife.bind(this);
 
         initViewModel();
     }
+
+
 
     private void initViewModel() {
         mViewModel = new ViewModelProvider(this).get(CourseEditorViewModel.class);
