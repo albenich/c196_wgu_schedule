@@ -16,6 +16,8 @@ public class AppRepository {
 
     public LiveData<List<TermEntity>> mTerms;
     public LiveData<List<CourseEntity>> mCourses;
+    public LiveData<List<AssessmentEntity>> mAssessments;
+
     private AppDatabase mDb;
     private Executor executor = Executors.newSingleThreadExecutor();
 
@@ -31,6 +33,7 @@ public class AppRepository {
         mDb = AppDatabase.getDatabase(context);
         mTerms = getAllTerms();
         mCourses = getAllCourses();
+        mAssessments = getAllAssessments();
         Log.i("AppRepository",mTerms == null ? "Empty mTerms" : "mTerms Populated!");
     }
 
@@ -41,6 +44,7 @@ public class AppRepository {
                 Log.i("AppRepo","Inserting terms into Db");
                 mDb.termDAO().insertAll(PopulateData.getTerms());
                 mDb.courseDAO().insertAll(PopulateData.getCourses());
+                mDb.assessmentDAO().insertAll(PopulateData.getAssessments());
             }
         });
     }
@@ -50,6 +54,7 @@ public class AppRepository {
             Log.i("AppRepo", "Deleting everything!");
             mDb.termDAO().deleteAll();
             mDb.courseDAO().deleteAll();
+            mDb.assessmentDAO().deleteAll();
         });
     }
 //Modules for TermEntity Querying
@@ -74,5 +79,16 @@ public class AppRepository {
 
     public void insertCourse(final CourseEntity course) {
         executor.execute(() -> mDb.courseDAO().insert(course));
+    }
+
+//Modules for AssessmentEntity Querying
+    private LiveData<List<AssessmentEntity>> getAllAssessments() { return mDb.assessmentDAO().getAll(); }
+
+    public AssessmentEntity getAssessmentById(int assessmentId) {
+        return mDb.assessmentDAO().getassessmentById(assessmentId);
+    }
+
+    public void insertAssessment(final AssessmentEntity assessment){
+        executor.execute(() -> mDb.assessmentDAO().insert(assessment));
     }
 }

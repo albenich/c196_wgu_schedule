@@ -2,6 +2,7 @@ package com.logiconets.c196_nick_albers.utility;
 
 import android.util.Log;
 
+import com.logiconets.c196_nick_albers.database.AssessmentEntity;
 import com.logiconets.c196_nick_albers.database.CourseEntity;
 import com.logiconets.c196_nick_albers.database.TermEntity;
 
@@ -14,6 +15,7 @@ public class PopulateData {
 
     private static List<TermEntity> terms = new ArrayList<>();
     private static List<CourseEntity> courses = new ArrayList<>();
+    private static List<AssessmentEntity> assessments = new ArrayList<>();
 
     private static void initTerms(){
         TermEntity t1 = new TermEntity();
@@ -55,6 +57,17 @@ public class PopulateData {
             courses.add(c1);
     }
 
+    private static void initAssessments(){
+        Calendar dueDate = GregorianCalendar.getInstance();
+
+        dueDate.set(2020,6,25);
+        AssessmentEntity a1 = new AssessmentEntity("Mobile Project","Performance",dueDate.getTime(),1);
+
+        if(assessments.isEmpty())
+            assessments.add(a1);
+    }
+
+
     public static List<TermEntity> getTerms(){
         initTerms();
         return terms;
@@ -63,5 +76,10 @@ public class PopulateData {
     public static List<CourseEntity> getCourses(){
         initCourses();
         return courses;
+    }
+
+    public static List<AssessmentEntity> getAssessments() {
+        initAssessments();
+        return assessments;
     }
 }

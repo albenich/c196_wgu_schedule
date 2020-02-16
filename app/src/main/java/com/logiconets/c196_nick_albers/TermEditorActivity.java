@@ -42,14 +42,11 @@ public class TermEditorActivity extends AppCompatActivity {
     @BindView(R.id.term_endDate)
     TextView mEndDate;
 
-    @BindView(R.id.notify_switch)
-    ToggleButton mNotify;
-
     final Calendar calendar = Calendar.getInstance();
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
     TextView mSelected;
-    AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+    //AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
     private TermEditorViewModel mViewModel;
     private boolean mNewTerm;
@@ -114,9 +111,6 @@ public class TermEditorActivity extends AppCompatActivity {
     private void saveAndReturn() throws ParseException {
         mViewModel.saveTerm(mTitle.getText().toString(),sdf.parse(mStartDate.getText().toString()),
         sdf.parse(mEndDate.getText().toString()));
-        if(mNotify.isChecked()){
-          //  alarmManager.set(AlarmManager.RTC,sdf.parse(mStartDate.getText().toString()).getTime(),PendingIntent.getActivity(this, 0,get));
-        }
         finish();
     }
 

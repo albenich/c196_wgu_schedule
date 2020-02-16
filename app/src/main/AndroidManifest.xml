@@ -9,10 +9,29 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".AssessmentEditorActivity"
+            android:label="@string/title_activity_assessment_editor"
+            android:parentActivityName=".AssessmentActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.logiconets.c196_nick_albers.AssessmentActivity" />
+        </activity>
+        <activity
+            android:name=".AssessmentActivity"
+            android:label="@string/title_activity_assessment"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.logiconets.c196_nick_albers.MainActivity" />
+        </activity>
+
         <receiver
             android:name=".utility.AlarmReceiver"
             android:enabled="true"
-            android:exported="false"></receiver>
+            android:exported="false" />
 
         <activity
             android:name=".CourseEditorActivity"

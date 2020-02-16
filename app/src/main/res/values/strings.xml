@@ -11,4 +11,6 @@
     <string name="new_term">New Term</string>
     <string name="edit_term">Edit Term</string>
     <string name="title_activity_course_editor">CourseEditorActivity</string>
+    <string name="title_activity_assessment">AssessmentActivity</string>
+    <string name="title_activity_assessment_editor">AssessmentEditorActivity</string>
 </resources>

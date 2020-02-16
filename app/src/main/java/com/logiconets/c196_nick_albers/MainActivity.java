@@ -31,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, CoursesActivity.class));
     }
 
+    public void onClickDisplayAssessments(View view) {
+        startActivity(new Intent(MainActivity.this,AssessmentActivity.class));
+    }
     private void addSampleData() {
         mRepository.addSampleData();
     }
@@ -44,4 +47,6 @@ public class MainActivity extends AppCompatActivity {
     public void onClickDeleteData(View view) {
         mRepository.deleteData();
     }
+
+
 }

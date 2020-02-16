@@ -12,13 +12,14 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {TermEntity.class, CourseEntity.class}, version=1)
+@Database(entities = {TermEntity.class, CourseEntity.class, AssessmentEntity.class}, version=1)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
 
     public static final String DATABASE_NAME = "Database.db";
     public abstract TermDAO termDAO();
     public abstract CourseDAO courseDAO();
+    public abstract AssessmentDAO assessmentDAO();
 
     private static volatile AppDatabase INSTANCE;
     //private static final int NUMBER_OF_THREADS = 4;
