@@ -155,4 +155,5 @@ public class CourseEntity {
     public void setCourseId(int courseId) {
         this.courseId = courseId;
     }
+
 }

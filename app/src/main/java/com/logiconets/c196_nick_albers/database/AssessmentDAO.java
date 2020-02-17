@@ -27,7 +27,10 @@ public interface AssessmentDAO {
     LiveData<List<AssessmentEntity>> getAll();
 
     @Query("SELECT * from assessment WHERE id = :id")
-    AssessmentEntity getassessmentById(int id);
+    AssessmentEntity getAssessmentById(int id);
+
+    @Query("SELECT * FROM assessment WHERE courseId = :courseId")
+    LiveData<List<AssessmentEntity>> getAssessmentsByCourseId(int courseId);
 
     @Query("SELECT COUNT(*) FROM assessment")
     int getCount();

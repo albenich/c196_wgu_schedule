@@ -39,6 +39,7 @@ public class CoursesActivity extends AppCompatActivity {
     private CourseListAdapter mAdapter;
     private CourseViewModel mViewModel;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

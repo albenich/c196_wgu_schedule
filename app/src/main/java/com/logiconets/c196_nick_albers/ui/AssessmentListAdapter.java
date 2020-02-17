@@ -2,6 +2,7 @@ package com.logiconets.c196_nick_albers.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +57,7 @@ public class AssessmentListAdapter extends RecyclerView.Adapter<AssessmentListAd
 
     @Override
     public void onBindViewHolder(AssessmentViewHolder holder, int position) {
-
+        Log.i("AssessmentListAdapter", "Triggering onBindViewHolder");
         final AssessmentEntity assessment = mAssessments.get(position);
         holder.mAssessmentView.setText(assessment.getTitle());
 

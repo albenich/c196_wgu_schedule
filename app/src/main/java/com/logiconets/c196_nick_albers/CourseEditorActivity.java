@@ -1,15 +1,25 @@
 package com.logiconets.c196_nick_albers;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 
+import com.logiconets.c196_nick_albers.database.AssessmentEntity;
+import com.logiconets.c196_nick_albers.database.CourseEntity;
+import com.logiconets.c196_nick_albers.ui.AssessmentListAdapter;
+import com.logiconets.c196_nick_albers.ui.CourseListAdapter;
+import com.logiconets.c196_nick_albers.viewmodel.AssessmentViewModel;
 import com.logiconets.c196_nick_albers.viewmodel.CourseEditorViewModel;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ShareCompat;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
@@ -17,7 +27,9 @@ import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,11 +63,17 @@ public class CourseEditorActivity extends AppCompatActivity {
     @BindView(R.id.course_notes)
     TextView mNotes;
 
+    @BindView(R.id.courseAssessmentRecyclerView)
+    RecyclerView mRecyclerView;
+
     TextView mSelected;
     final Calendar calendar = Calendar.getInstance();
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
     private CourseEditorViewModel mViewModel;
+    private AssessmentViewModel mAssessmentViewModel;
+    private List<AssessmentEntity> assessmentData = new ArrayList<>();
+    private AssessmentListAdapter mAdapter;
     private boolean mNewCourse;
 
     @Override
@@ -66,15 +84,42 @@ public class CourseEditorActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_cake);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ButterKnife.bind(this);
 
+        ButterKnife.bind(this);
+        initRecyclerView();
         initViewModel();
     }
 
 
 
     private void initViewModel() {
+        mAssessmentViewModel = new ViewModelProvider(this).get(AssessmentViewModel.class);
         mViewModel = new ViewModelProvider(this).get(CourseEditorViewModel.class);
+
+        final Observer<List<AssessmentEntity>> assessmentObserver = assessmentEntities -> {
+            assessmentData.clear();
+            assessmentData.addAll(assessmentEntities);
+            int courseId;
+
+            if(mViewModel.mLiveCourse.getValue() != null && assessmentData != null) {
+                courseId = mViewModel.mLiveCourse.getValue().getCourseId();
+                for (AssessmentEntity assessment : assessmentData) {
+                    Log.i("CourseEditor", "assessmentData = " + String.valueOf(assessment.getCourseId()));
+                    Log.i("CourseEditor","mViewModel courseId = " + String.valueOf(courseId));
+                    if (assessment.getCourseId() != courseId)
+                        assessmentData.remove(assessment);
+                }
+            }
+
+
+            if (mAdapter == null) {
+                mAdapter = new AssessmentListAdapter(assessmentData, CourseEditorActivity.this);
+                mRecyclerView.setAdapter(mAdapter);
+            } else
+                mAdapter.notifyDataSetChanged();
+        };
+
+        mAssessmentViewModel.mAssessments.observe(this,assessmentObserver);
 
         mViewModel.mLiveCourse.observe(this, courseEntity -> {
             mTitle.setText(courseEntity.getTitle());
@@ -97,6 +142,12 @@ public class CourseEditorActivity extends AppCompatActivity {
             int courseId = extras.getInt(COURSE_ID_KEY);
             mViewModel.loadData(courseId);
         }
+    }
+
+    private void initRecyclerView(){
+        mRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(layoutManager);
     }
 
     DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -134,6 +185,8 @@ public class CourseEditorActivity extends AppCompatActivity {
         }
         finish();
     }
+
+
 
     @OnClick(R.id.course_startDate)
     public void onClickStartDate() {

@@ -85,7 +85,7 @@ public class AppRepository {
     private LiveData<List<AssessmentEntity>> getAllAssessments() { return mDb.assessmentDAO().getAll(); }
 
     public AssessmentEntity getAssessmentById(int assessmentId) {
-        return mDb.assessmentDAO().getassessmentById(assessmentId);
+        return mDb.assessmentDAO().getAssessmentById(assessmentId);
     }
 
     public void insertAssessment(final AssessmentEntity assessment){
