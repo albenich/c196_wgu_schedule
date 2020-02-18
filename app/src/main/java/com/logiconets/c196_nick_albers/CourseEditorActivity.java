@@ -176,6 +176,7 @@ public class CourseEditorActivity extends AppCompatActivity {
             case R.id.action_assessments:
                 Intent intent=new Intent(this,AssessmentActivity.class);
                 intent.putExtra("CourseId",mViewModel.mLiveCourse.getValue().getCourseId());
+                intent.putExtra("CourseTitle",mViewModel.mLiveCourse.getValue().getTitle());
                 startActivity(intent);
                 return true;
             default:

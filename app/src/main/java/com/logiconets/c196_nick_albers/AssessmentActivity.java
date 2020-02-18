@@ -37,22 +37,26 @@ public class AssessmentActivity extends AppCompatActivity {
     private AssessmentListAdapter mAdapter;
     private AssessmentViewModel mViewModel;
     private int courseId;
+    String courseTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assessment);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Assessments");
+
+        Intent intent = getIntent();
+        courseId = intent.getIntExtra("CourseId",-1);
+        courseTitle = intent.getStringExtra("CourseTitle");
+        toolbar.setTitle(courseId == -1 ? "Assessments" : courseTitle + " Assessments");
+
         setSupportActionBar(toolbar);
 
         ButterKnife.bind(this);
         initRecyclerView();
         initViewModel();
 
-        Intent intent = getIntent();
-        courseId = intent.getIntExtra("CourseId",-1);
-        Log.i("CourseId", "CourseId is getting sent as " + String.valueOf(courseId));
+        Log.i("CourseId", "CourseId is getting sent as " + courseTitle + " " + courseId);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
