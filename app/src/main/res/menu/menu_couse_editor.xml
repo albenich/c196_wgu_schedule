@@ -3,8 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.logiconets.c196_nick_albers.CourseEditorActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_assessments"
         android:orderInCategory="100"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="Assessments"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_notes"
+        android:orderInCategory="110"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:title="Notes"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_settings"
         android:title="@string/action_settings"
         app:showAsAction="never" />
 </menu>

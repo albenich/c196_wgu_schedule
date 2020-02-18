@@ -2,9 +2,8 @@ package com.logiconets.c196_nick_albers;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.logiconets.c196_nick_albers.database.AssessmentEntity;
 import com.logiconets.c196_nick_albers.ui.AssessmentListAdapter;
 import com.logiconets.c196_nick_albers.viewmodel.AssessmentViewModel;
@@ -37,18 +36,23 @@ public class AssessmentActivity extends AppCompatActivity {
     private List<AssessmentEntity> assessmentData = new ArrayList<>();
     private AssessmentListAdapter mAdapter;
     private AssessmentViewModel mViewModel;
+    private int courseId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assessment);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Assessments");
         setSupportActionBar(toolbar);
 
         ButterKnife.bind(this);
         initRecyclerView();
         initViewModel();
 
+        Intent intent = getIntent();
+        courseId = intent.getIntExtra("CourseId",-1);
+        Log.i("CourseId", "CourseId is getting sent as " + String.valueOf(courseId));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -57,8 +61,15 @@ public class AssessmentActivity extends AppCompatActivity {
         final Observer<List<AssessmentEntity>> assessmentObserver =
                 assessmentEntities -> {
                     assessmentData.clear();
-                    assessmentData.addAll(assessmentEntities);
-
+                    if(courseId != -1){
+                        for(AssessmentEntity assessment:assessmentEntities){
+                            if(assessment.getCourseId() == courseId){
+                                assessmentData.add(assessment);
+                            }
+                        }
+                    } else{
+                        assessmentData.addAll(assessmentEntities);
+                    }
                     if (mAdapter == null) {
                         mAdapter = new AssessmentListAdapter(assessmentData,AssessmentActivity.this);
                         mRecyclerView.setAdapter(mAdapter);
