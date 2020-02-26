@@ -51,7 +51,7 @@ public class CoursesActivity extends AppCompatActivity {
         initRecyclerView();
         initViewModel();
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

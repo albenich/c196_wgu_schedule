@@ -50,7 +50,7 @@ public class TermsActivity extends AppCompatActivity {
         initViewModel();
 
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 

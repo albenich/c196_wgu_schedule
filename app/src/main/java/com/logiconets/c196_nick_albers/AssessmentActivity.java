@@ -57,7 +57,7 @@ public class AssessmentActivity extends AppCompatActivity {
         initViewModel();
 
         Log.i("CourseId", "CourseId is getting sent as " + courseTitle + " " + courseId);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
