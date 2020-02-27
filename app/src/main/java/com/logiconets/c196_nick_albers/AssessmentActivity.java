@@ -3,11 +3,13 @@ package com.logiconets.c196_nick_albers;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.logiconets.c196_nick_albers.database.AssessmentEntity;
 import com.logiconets.c196_nick_albers.ui.AssessmentListAdapter;
 import com.logiconets.c196_nick_albers.viewmodel.AssessmentViewModel;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
@@ -57,7 +59,7 @@ public class AssessmentActivity extends AppCompatActivity {
         initViewModel();
 
         Log.i("CourseId", "CourseId is getting sent as " + courseTitle + " " + courseId);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
@@ -92,4 +94,24 @@ public class AssessmentActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(layoutManager);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if(item.getItemId() == android.R.id.home)
+        {
+            Log.i("Assess", "CourseId = " + courseId);
+            this.onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+/*
+    @Override
+    public boolean onSupportNavigateUp() {
+        Log.i("Assess", "Home Pressed");
+        AssessmentActivity.this.onBackPressed();
+        return true;
+        //return super.onSupportNavigateUp();
+    }
+*/
 }
