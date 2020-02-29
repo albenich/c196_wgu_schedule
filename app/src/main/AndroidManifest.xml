@@ -30,8 +30,8 @@
 
         <receiver
             android:name=".utility.AlarmReceiver"
-            android:enabled="true"
-            android:exported="false" />
+            android:enabled="true" >
+        </receiver>
 
         <activity
             android:name=".CourseEditorActivity"

@@ -11,29 +11,32 @@ import android.os.Bundle;
 
 import androidx.core.app.NotificationCompat;
 
+import com.logiconets.c196_nick_albers.CourseEditorActivity;
+import com.logiconets.c196_nick_albers.CoursesActivity;
 import com.logiconets.c196_nick_albers.MainActivity;
 import com.logiconets.c196_nick_albers.R;
 
 public class AlarmReceiver extends BroadcastReceiver {
     private NotificationManager mNotificationManager;
-    private static final int NOTIFICATION_ID = 0;
+    private static final int NOTIFICATION_ID = 1337;
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        createNotificationChannel(context);
         mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         deliverNotification(context);
     }
 
     private void deliverNotification(Context context){
-        Intent contentIntent = new Intent(context, MainActivity.class);
+        Intent contentIntent = new Intent(context, CoursesActivity.class);
         PendingIntent contentPendingIntent = PendingIntent.getActivity(context, NOTIFICATION_ID,
                 contentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,PRIMARY_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_logic_one_logo)
-                .setContentTitle("Upcoming Term")
-                .setContentText("There is a new Term starting soon!")
+                .setContentTitle("Upcoming Course")
+                .setContentText("There is a new Course starting soon!")
                 .setContentIntent(contentPendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true)
@@ -56,14 +59,14 @@ public class AlarmReceiver extends BroadcastReceiver {
             // Create the NotificationChannel with all the parameters.
             NotificationChannel notificationChannel = new NotificationChannel
                     (PRIMARY_CHANNEL_ID,
-                            "Term notice",
+                            "Course notice",
                             NotificationManager.IMPORTANCE_HIGH);
 
             notificationChannel.enableLights(true);
             notificationChannel.setLightColor(Color.RED);
             notificationChannel.enableVibration(true);
             notificationChannel.setDescription
-                    ("Notifies the student that the Term starts in a week");
+                    ("Notifies the student that the Course starts in a week");
             mNotificationManager.createNotificationChannel(notificationChannel);
         }
     }

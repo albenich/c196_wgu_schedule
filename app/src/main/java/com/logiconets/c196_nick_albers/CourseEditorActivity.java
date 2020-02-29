@@ -5,6 +5,7 @@ import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -73,8 +75,8 @@ public class CourseEditorActivity extends AppCompatActivity {
     @BindView(R.id.course_notes)
     TextView mNotes;
 
-   // @BindView(R.id.courseAssessmentRecyclerView)
-   // RecyclerView mRecyclerView;
+    // @BindView(R.id.courseAssessmentRecyclerView)
+    // RecyclerView mRecyclerView;
 
     TextView mSelected;
     final Calendar calendar = Calendar.getInstance();
@@ -86,16 +88,13 @@ public class CourseEditorActivity extends AppCompatActivity {
     private AssessmentListAdapter mAdapter;
     private boolean mNewCourse;
 
-    private static final int NOTIFICATION_ID = 0;
+    private static final int NOTIFICATION_ID = 1337;
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
     private NotificationManager mNotificationManager;
     private AlarmReceiver alarmReceiver;
-    Intent notifyIntent = new Intent(this, AlarmReceiver.class);
-    boolean isArmed = (PendingIntent.getBroadcast(this,NOTIFICATION_ID, notifyIntent,
-            PendingIntent.FLAG_NO_CREATE) != null);
-    final PendingIntent notifyPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_ID,
-            notifyIntent,PendingIntent.FLAG_UPDATE_CURRENT);
-    final AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+    private AlarmManager alarmManager;
+    private PendingIntent notifyPendingIntent;
+    private boolean isArmed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,19 +105,30 @@ public class CourseEditorActivity extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_save_black);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
         ButterKnife.bind(this);
-  //      initRecyclerView();
+        //      initRecyclerView();
         initViewModel();
+
+        Intent notifyIntent = new Intent(this, AlarmReceiver.class);
+        notifyPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_ID,
+                notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        isArmed = (PendingIntent.getBroadcast(this, NOTIFICATION_ID, notifyIntent,
+                PendingIntent.FLAG_NO_CREATE) != null);
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        /*alarmManager.setInexactRepeating(AlarmManager.RTC,
+                SystemClock.elapsedRealtime() + 5000,
+                15000, notifyPendingIntent); */
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_couse_editor, menu);
         return true;
     }
 
     private void initViewModel() {
-    //    mAssessmentViewModel = new ViewModelProvider(this).get(AssessmentViewModel.class);
+        //    mAssessmentViewModel = new ViewModelProvider(this).get(AssessmentViewModel.class);
         mViewModel = new ViewModelProvider(this).get(CourseEditorViewModel.class);
 /*
         final Observer<List<AssessmentEntity>> assessmentObserver = assessmentEntities -> {
@@ -155,32 +165,31 @@ public class CourseEditorActivity extends AppCompatActivity {
             mCmEmail.setText(courseEntity.getCmEmail());
             mCmPhone.setText(courseEntity.getCmPhone());
             mNotes.setText(courseEntity.getNotes());
-            });
+        });
 
         Bundle extras = getIntent().getExtras();
-        if(extras == null) {
+        if (extras == null) {
             setTitle("New Course");
             mNewCourse = true;
-        }
-        else{
+        } else {
             setTitle("Edit Course");
             int courseId = extras.getInt(COURSE_ID_KEY);
             mViewModel.loadData(courseId);
         }
     }
 
-  /*  private void initRecyclerView(){
-        mRecyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(layoutManager);
-    }
-*/
+    /*  private void initRecyclerView(){
+          mRecyclerView.setHasFixedSize(true);
+          LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+          mRecyclerView.setLayoutManager(layoutManager);
+      }
+  */
     DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
             calendar.set(Calendar.YEAR, year);
             calendar.set(Calendar.MONTH, month);
-            calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
             mSelected.setText(sdf.format(calendar.getTime()));
         }
@@ -200,7 +209,7 @@ public class CourseEditorActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.action_setAlarm:
-                isArmed = true;
+                isArmed = !isArmed;
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -225,16 +234,30 @@ public class CourseEditorActivity extends AppCompatActivity {
         //Testing alarmManager setup at SaveAndReturn
         String toastMessage;
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        Date testCalendar = null;
+        Date testDate = null;
+        Calendar today = Calendar.getInstance();
+        today.clear(Calendar.HOUR);
+        today.clear(Calendar.HOUR_OF_DAY);
+        today.clear(Calendar.MINUTE);
+        today.clear(Calendar.SECOND);
+        today.clear(Calendar.MILLISECOND);
+        Date dateOnly = new Date(today.getTimeInMillis() - today.get(Calendar.HOUR_OF_DAY) * 60 * 60 * 1000);
         try {
-            testCalendar = sdf.parse(mStartDate.toString());
+            Log.i("Test", isArmed ? "Alarm Enabled":"Alarm Disabled");
+            Log.i("Test","mStartDate = " + mStartDate.getText().toString());
+            testDate = sdf.parse(mStartDate.getText().toString());
+            Log.i("Test","sdf.parse = " + testDate.toString());
+            Log.i("Test","Current Time = " + Calendar.getInstance().getTime().toString());
+            Log.i("Test","today var = " + dateOnly.toString());
         } catch (ParseException e) {
             e.printStackTrace();
         }
         if(isArmed){
-            if(testCalendar.getTime() > Calendar.getInstance().getTime().getTime())
-                alarmManager.setExact(AlarmManager.RTC,testCalendar.getTime(),notifyPendingIntent);
-            toastMessage = "Stand Up Alarm On!";
+            toastMessage = "Start Date before current Date";
+            if(testDate.after(dateOnly) || testDate.equals(dateOnly)) {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, testDate.getTime(), notifyPendingIntent);
+                toastMessage = "Stand Up Alarm On!";
+            }
         }
         else{
             if(alarmManager != null){
