@@ -2,13 +2,16 @@ package com.logiconets.c196_nick_albers;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.logiconets.c196_nick_albers.database.TermEntity;
 import com.logiconets.c196_nick_albers.ui.TermListAdapter;
 import com.logiconets.c196_nick_albers.viewmodel.TermViewModel;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;

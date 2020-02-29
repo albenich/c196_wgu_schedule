@@ -88,7 +88,7 @@ public class CourseEditorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course_editor);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_cake);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_save_black);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ButterKnife.bind(this);
