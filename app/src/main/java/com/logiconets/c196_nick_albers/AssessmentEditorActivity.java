@@ -55,6 +55,7 @@ public class AssessmentEditorActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_save_black);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
         

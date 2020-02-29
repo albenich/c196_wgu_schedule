@@ -1,17 +1,23 @@
 package com.logiconets.c196_nick_albers;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.logiconets.c196_nick_albers.database.AssessmentEntity;
 import com.logiconets.c196_nick_albers.database.CourseEntity;
 import com.logiconets.c196_nick_albers.ui.AssessmentListAdapter;
 import com.logiconets.c196_nick_albers.ui.CourseListAdapter;
+import com.logiconets.c196_nick_albers.utility.AlarmReceiver;
 import com.logiconets.c196_nick_albers.viewmodel.AssessmentViewModel;
 import com.logiconets.c196_nick_albers.viewmodel.CourseEditorViewModel;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ShareCompat;
@@ -26,11 +32,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -78,13 +86,24 @@ public class CourseEditorActivity extends AppCompatActivity {
     private AssessmentListAdapter mAdapter;
     private boolean mNewCourse;
 
+    private static final int NOTIFICATION_ID = 0;
+    private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
+    private NotificationManager mNotificationManager;
+    private AlarmReceiver alarmReceiver;
+    Intent notifyIntent = new Intent(this, AlarmReceiver.class);
+    boolean isArmed = (PendingIntent.getBroadcast(this,NOTIFICATION_ID, notifyIntent,
+            PendingIntent.FLAG_NO_CREATE) != null);
+    final PendingIntent notifyPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_ID,
+            notifyIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+    final AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_editor);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_cake);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_save_black);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ButterKnife.bind(this);
@@ -167,6 +186,7 @@ public class CourseEditorActivity extends AppCompatActivity {
         }
     };
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
@@ -179,16 +199,21 @@ public class CourseEditorActivity extends AppCompatActivity {
                 intent.putExtra("CourseTitle",mViewModel.mLiveCourse.getValue().getTitle());
                 startActivity(intent);
                 return true;
+            case R.id.action_setAlarm:
+                isArmed = true;
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onBackPressed(){
         saveAndReturn();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void saveAndReturn(){
         try {
             mViewModel.saveCourse(mTitle.getText().toString(),sdf.parse(mStartDate.getText().toString()),
@@ -197,6 +222,30 @@ public class CourseEditorActivity extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        //Testing alarmManager setup at SaveAndReturn
+        String toastMessage;
+        mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        Date testCalendar = null;
+        try {
+            testCalendar = sdf.parse(mStartDate.toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if(isArmed){
+            if(testCalendar.getTime() > Calendar.getInstance().getTime().getTime())
+                alarmManager.setExact(AlarmManager.RTC,testCalendar.getTime(),notifyPendingIntent);
+            toastMessage = "Stand Up Alarm On!";
+        }
+        else{
+            if(alarmManager != null){
+                alarmManager.cancel(notifyPendingIntent);
+            }
+            mNotificationManager.cancelAll();
+            toastMessage = "Stand Up Alarm Off!";
+        }
+        Toast.makeText(this,toastMessage,Toast.LENGTH_SHORT).show();
+        //End alarmManager setup
+
         finish();
     }
 

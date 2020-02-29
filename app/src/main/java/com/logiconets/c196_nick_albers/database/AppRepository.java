@@ -38,14 +38,11 @@ public class AppRepository {
     }
 
     public void addSampleData() {
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                Log.i("AppRepo","Inserting terms into Db");
-                mDb.termDAO().insertAll(PopulateData.getTerms());
-                mDb.courseDAO().insertAll(PopulateData.getCourses());
-                mDb.assessmentDAO().insertAll(PopulateData.getAssessments());
-            }
+        executor.execute(() -> {
+            Log.i("AppRepo","Inserting terms into Db");
+            mDb.termDAO().insertAll(PopulateData.getTerms());
+            mDb.courseDAO().insertAll(PopulateData.getCourses());
+            mDb.assessmentDAO().insertAll(PopulateData.getAssessments());
         });
     }
 
