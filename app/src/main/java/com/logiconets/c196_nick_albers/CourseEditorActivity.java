@@ -2,6 +2,7 @@ package com.logiconets.c196_nick_albers;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -9,6 +10,7 @@ import com.logiconets.c196_nick_albers.database.AssessmentEntity;
 import com.logiconets.c196_nick_albers.database.CourseEntity;
 import com.logiconets.c196_nick_albers.ui.AssessmentListAdapter;
 import com.logiconets.c196_nick_albers.ui.CourseListAdapter;
+import com.logiconets.c196_nick_albers.utility.AlarmReceiver;
 import com.logiconets.c196_nick_albers.viewmodel.AssessmentViewModel;
 import com.logiconets.c196_nick_albers.viewmodel.CourseEditorViewModel;
 
@@ -77,6 +79,8 @@ public class CourseEditorActivity extends AppCompatActivity {
     private List<AssessmentEntity> assessmentData = new ArrayList<>();
     private AssessmentListAdapter mAdapter;
     private boolean mNewCourse;
+    private NotificationManager mNotificationManager;
+    private AlarmReceiver alarmReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,6 +182,9 @@ public class CourseEditorActivity extends AppCompatActivity {
                 intent.putExtra("CourseId",mViewModel.mLiveCourse.getValue().getCourseId());
                 intent.putExtra("CourseTitle",mViewModel.mLiveCourse.getValue().getTitle());
                 startActivity(intent);
+                return true;
+            case R.id.action_setAlarm:
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
