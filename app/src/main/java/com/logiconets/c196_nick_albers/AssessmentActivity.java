@@ -105,13 +105,5 @@ public class AssessmentActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-/*
-    @Override
-    public boolean onSupportNavigateUp() {
-        Log.i("Assess", "Home Pressed");
-        AssessmentActivity.this.onBackPressed();
-        return true;
-        //return super.onSupportNavigateUp();
-    }
-*/
+
 }

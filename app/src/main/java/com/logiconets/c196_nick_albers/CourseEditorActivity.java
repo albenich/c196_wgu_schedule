@@ -10,11 +10,11 @@ import android.os.Bundle;
 
 import com.logiconets.c196_nick_albers.database.AssessmentEntity;
 import com.logiconets.c196_nick_albers.ui.AssessmentListAdapter;
+import com.logiconets.c196_nick_albers.utility.AlarmController;
 import com.logiconets.c196_nick_albers.utility.AlarmReceiver;
 import com.logiconets.c196_nick_albers.viewmodel.AssessmentViewModel;
 import com.logiconets.c196_nick_albers.viewmodel.CourseEditorViewModel;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ShareCompat;
@@ -39,6 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.logiconets.c196_nick_albers.utility.Constants.ASSESSMENT_ID_KEY;
 import static com.logiconets.c196_nick_albers.utility.Constants.COURSE_ID_KEY;
 
 public class CourseEditorActivity extends AppCompatActivity {
@@ -72,9 +73,7 @@ public class CourseEditorActivity extends AppCompatActivity {
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
     private CourseEditorViewModel mViewModel;
-    private AssessmentViewModel mAssessmentViewModel;
-    private List<AssessmentEntity> assessmentData = new ArrayList<>();
-    private AssessmentListAdapter mAdapter;
+
     private boolean mNewCourse;
     Menu mainMenu;
     MenuItem mToggleAlarm;
@@ -84,6 +83,8 @@ public class CourseEditorActivity extends AppCompatActivity {
     private AlarmManager alarmManager;
     private PendingIntent notifyPendingIntent;
     private boolean isArmed;
+
+    AlarmController alarmController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +100,8 @@ public class CourseEditorActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
         initViewModel();
+
+        alarmController = new AlarmController("Course 1", new Date(),this);
 
         Intent notifyIntent = new Intent(this, AlarmReceiver.class);
         notifyPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_ID,
@@ -116,8 +119,17 @@ public class CourseEditorActivity extends AppCompatActivity {
     }
 
     private void initViewModel() {
-        //    mAssessmentViewModel = new ViewModelProvider(this).get(AssessmentViewModel.class);
         mViewModel = new ViewModelProvider(this).get(CourseEditorViewModel.class);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras == null) {
+            setTitle("New Course");
+            mNewCourse = true;
+        } else {
+            setTitle("Edit Course");
+            int courseId = extras.getInt(COURSE_ID_KEY);
+            mViewModel.loadData(courseId);
+        }
 
         mViewModel.mLiveCourse.observe(this, courseEntity -> {
             mTitle.setText(courseEntity.getTitle());
@@ -130,15 +142,6 @@ public class CourseEditorActivity extends AppCompatActivity {
             mNotes.setText(courseEntity.getNotes());
         });
 
-        Bundle extras = getIntent().getExtras();
-        if (extras == null) {
-            setTitle("New Course");
-            mNewCourse = true;
-        } else {
-            setTitle("Edit Course");
-            int courseId = extras.getInt(COURSE_ID_KEY);
-            mViewModel.loadData(courseId);
-        }
     }
 
     DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -158,12 +161,6 @@ public class CourseEditorActivity extends AppCompatActivity {
             case android.R.id.home:
                 saveAndReturn();
                 return true;
-            case R.id.action_assessments:
-                Intent intent=new Intent(this,AssessmentActivity.class);
-                intent.putExtra("CourseId",mViewModel.mLiveCourse.getValue().getCourseId());
-                intent.putExtra("CourseTitle",mViewModel.mLiveCourse.getValue().getTitle());
-                startActivity(intent);
-                return true;
             case R.id.toggle_alarm:
                 isArmed = !isArmed;
                 if (isArmed) {
@@ -171,8 +168,20 @@ public class CourseEditorActivity extends AppCompatActivity {
                 } else {
                     mToggleAlarm.setIcon(R.drawable.ic_snooze);
                 }
-                setAlarm();
+                //setAlarm();
+                alarmController.setAlarm();
                 return true;
+            case R.id.action_assessments:
+                Intent intent=new Intent(this,AssessmentActivity.class);
+                intent.putExtra("CourseId",mViewModel.mLiveCourse.getValue().getCourseId());
+                intent.putExtra("CourseTitle",mViewModel.mLiveCourse.getValue().getTitle());
+                startActivity(intent);
+                return true;
+            case R.id.action_add_assessments:
+                Intent addIntent = new Intent(this,AssessmentEditorActivity.class);
+                addIntent.putExtra(COURSE_ID_KEY,mViewModel.mLiveCourse.getValue().getCourseId());
+                Log.i("CourseEditor", "CourseId = " + mViewModel.mLiveCourse.getValue().getCourseId());
+                startActivity(addIntent);
             default:
                 return super.onOptionsItemSelected(item);
         }

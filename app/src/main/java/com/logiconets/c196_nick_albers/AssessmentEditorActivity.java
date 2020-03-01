@@ -1,19 +1,17 @@
 package com.logiconets.c196_nick_albers;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.logiconets.c196_nick_albers.viewmodel.AssessmentViewModel;
 import com.logiconets.c196_nick_albers.viewmodel.AssessmentEditorViewModel;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.DatePicker;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -27,6 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.logiconets.c196_nick_albers.utility.Constants.ASSESSMENT_ID_KEY;
 import static com.logiconets.c196_nick_albers.utility.Constants.COURSE_ID_KEY;
 
 public class AssessmentEditorActivity extends AppCompatActivity {
@@ -65,6 +64,25 @@ public class AssessmentEditorActivity extends AppCompatActivity {
     private void initViewModel() {
         mViewModel = new ViewModelProvider(this).get(AssessmentEditorViewModel.class);
 
+        Intent intent = getIntent();
+        int courseId = intent.getIntExtra(COURSE_ID_KEY,-1);
+        Bundle extras = intent.getExtras();
+
+        if(extras == null) {
+            setTitle("New Assessment");
+            mNewAssessment = true;
+        }
+        else if(courseId != -1){
+            setTitle("New Assessment");
+            Log.i("CourseEditor", "CourseId = " + courseId);
+            mCourseId.setText(String.valueOf(courseId));
+        }
+        else{
+            setTitle("Edit Assessment");
+            int assessmentId = extras.getInt(ASSESSMENT_ID_KEY);
+            mViewModel.loadData(assessmentId);
+        }
+
         mViewModel.mLiveAssessment.observe(this, assessmentEntity -> {
             mTitle.setText(assessmentEntity.getTitle());
             if(assessmentEntity.getAssessType().equals("Performance")) {
@@ -76,16 +94,7 @@ public class AssessmentEditorActivity extends AppCompatActivity {
             mCourseId.setText(String.valueOf(assessmentEntity.getCourseId()));
         });
 
-        Bundle extras = getIntent().getExtras();
-        if(extras == null) {
-            setTitle("New Assessment");
-            mNewAssessment = true;
-        }
-        else{
-            setTitle("Edit Assessment");
-            int assessmentId = extras.getInt(COURSE_ID_KEY);
-            mViewModel.loadData(assessmentId);
-        }
+
     }
 
     DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {

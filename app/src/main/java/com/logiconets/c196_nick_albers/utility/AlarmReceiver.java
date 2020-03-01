@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
@@ -16,15 +17,22 @@ import com.logiconets.c196_nick_albers.CoursesActivity;
 import com.logiconets.c196_nick_albers.MainActivity;
 import com.logiconets.c196_nick_albers.R;
 
+import static com.logiconets.c196_nick_albers.utility.Constants.ALARM_TEXT_ID;
+import static com.logiconets.c196_nick_albers.utility.Constants.ALARM_TITLE_ID;
+
 public class AlarmReceiver extends BroadcastReceiver {
     private NotificationManager mNotificationManager;
     private static final int NOTIFICATION_ID = 1337;
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
+    private static String contentTitle;
+    private static String contentText;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         createNotificationChannel(context);
         mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        Log.i("AlarmReceiver", "Title = " + contentTitle);
+        Log.i("AlarmReceiver", "Text = " + contentText);
         deliverNotification(context);
     }
 
@@ -35,8 +43,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,PRIMARY_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_logic_one_logo)
-                .setContentTitle("Upcoming Course")
-                .setContentText("There is a new Course starting soon!")
+                .setContentTitle(contentTitle)
+                .setContentText(contentText)
                 .setContentIntent(contentPendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true)
@@ -69,5 +77,21 @@ public class AlarmReceiver extends BroadcastReceiver {
                     ("Notifies the student that the Course starts in a week");
             mNotificationManager.createNotificationChannel(notificationChannel);
         }
+    }
+
+    public static String getContentTitle() {
+        return contentTitle;
+    }
+
+    public static void setContentTitle(String contentTitle) {
+        AlarmReceiver.contentTitle = contentTitle;
+    }
+
+    public static String getContentText() {
+        return contentText;
+    }
+
+    public static void setContentText(String contentText) {
+        AlarmReceiver.contentText = contentText;
     }
 }

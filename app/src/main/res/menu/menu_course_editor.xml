@@ -16,4 +16,9 @@
         android:title="View Assessments"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_add_assessments"
+        android:title="Add Assessment"
+        app:showAsAction="never" />
+
 </menu>

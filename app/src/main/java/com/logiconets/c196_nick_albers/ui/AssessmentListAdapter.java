@@ -20,7 +20,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.logiconets.c196_nick_albers.utility.Constants.COURSE_ID_KEY;
+import static com.logiconets.c196_nick_albers.utility.Constants.ASSESSMENT_ID_KEY;
 
 public class AssessmentListAdapter extends RecyclerView.Adapter<AssessmentListAdapter.AssessmentViewHolder> {
 
@@ -63,7 +63,7 @@ public class AssessmentListAdapter extends RecyclerView.Adapter<AssessmentListAd
 
         holder.mFab.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, AssessmentEditorActivity.class);
-            intent.putExtra(COURSE_ID_KEY, assessment.getAssessmentId());
+            intent.putExtra(ASSESSMENT_ID_KEY, assessment.getAssessmentId());
             mContext.startActivity(intent);
         });
     }
