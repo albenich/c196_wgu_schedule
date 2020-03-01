@@ -4,13 +4,16 @@
     tools:context="com.logiconets.c196_nick_albers.CourseEditorActivity">
 
     <item
-        android:id="@+id/action_assessments"
-        android:title="View Assessments"
-        app:showAsAction="never" />
+        android:id="@+id/toggle_alarm"
+        android:title="Toggle Alarm"
+        android:icon="@drawable/ic_alarm_black"
+        app:showAsAction="ifRoom"
+        android:focusable="false"
+        />
 
     <item
-        android:id="@+id/action_setAlarm"
-        android:title="Enable Notifications"
+        android:id="@+id/action_assessments"
+        android:title="View Assessments"
         app:showAsAction="never" />
 
 </menu>
