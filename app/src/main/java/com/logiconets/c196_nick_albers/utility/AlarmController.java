@@ -37,9 +37,9 @@ public class AlarmController {
 
         mNotificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
 
-        AlarmReceiver.setContentText(alarmTitle);
-        AlarmReceiver.setContentTitle(alarmTitle + " is coming soon!");
-        intent = new Intent(context, AlarmReceiver.class);
+        intent = new Intent(context, AlarmReceiver.class)
+                .putExtra(ALARM_TITLE_ID,alarmTitle)
+                .putExtra(ALARM_TEXT_ID,alarmTitle + " is coming up soon!");
         notifyPendingIntent = PendingIntent.getBroadcast(context, NOTIFICATION_ID,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
         isArmed = (PendingIntent.getBroadcast(context, NOTIFICATION_ID, intent,
@@ -114,7 +114,6 @@ public class AlarmController {
     }
 
     public void setAlarm(){
-        //Testing alarmManager setup at SaveAndReturn
         String toastMessage;
         Calendar today = Calendar.getInstance();
         today.clear(Calendar.HOUR);
@@ -128,7 +127,7 @@ public class AlarmController {
         if(alarmDate.after(dateOnly) || alarmDate.equals(dateOnly)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmDate.getTime(), notifyPendingIntent);
-                toastMessage = alarmTitle + " Notification is On!";
+                toastMessage = alarmTitle + " Notification is On!\nSet to " + alarmDate.toString();
             }
         }
         Toast.makeText(context,toastMessage,Toast.LENGTH_SHORT).show();

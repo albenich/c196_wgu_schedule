@@ -19,24 +19,27 @@ import com.logiconets.c196_nick_albers.R;
 
 import static com.logiconets.c196_nick_albers.utility.Constants.ALARM_TEXT_ID;
 import static com.logiconets.c196_nick_albers.utility.Constants.ALARM_TITLE_ID;
+import static com.logiconets.c196_nick_albers.utility.Constants.GROUP_KEY;
 
 public class AlarmReceiver extends BroadcastReceiver {
     private NotificationManager mNotificationManager;
     private static final int NOTIFICATION_ID = 1337;
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
-    private static String contentTitle;
-    private static String contentText;
+//    private static String contentTitle;
+//    private static String contentText;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         createNotificationChannel(context);
         mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        String contentTitle = intent.getStringExtra(ALARM_TITLE_ID);
+        String contentText = intent.getStringExtra(ALARM_TEXT_ID);
         Log.i("AlarmReceiver", "Title = " + contentTitle);
         Log.i("AlarmReceiver", "Text = " + contentText);
-        deliverNotification(context);
+        deliverNotification(context, contentTitle, contentText);
     }
 
-    private void deliverNotification(Context context){
+    private void deliverNotification(Context context, String contentTitle, String contentText){
         Intent contentIntent = new Intent(context, CoursesActivity.class);
         PendingIntent contentPendingIntent = PendingIntent.getActivity(context, NOTIFICATION_ID,
                 contentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -78,7 +81,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             mNotificationManager.createNotificationChannel(notificationChannel);
         }
     }
-
+/*
     public static String getContentTitle() {
         return contentTitle;
     }
@@ -93,5 +96,5 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     public static void setContentText(String contentText) {
         AlarmReceiver.contentText = contentText;
-    }
+    }*/
 }

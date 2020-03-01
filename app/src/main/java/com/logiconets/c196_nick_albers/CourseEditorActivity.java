@@ -1,18 +1,10 @@
 package com.logiconets.c196_nick_albers;
 
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 
-import com.logiconets.c196_nick_albers.database.AssessmentEntity;
-import com.logiconets.c196_nick_albers.ui.AssessmentListAdapter;
 import com.logiconets.c196_nick_albers.utility.AlarmController;
-import com.logiconets.c196_nick_albers.utility.AlarmReceiver;
-import com.logiconets.c196_nick_albers.viewmodel.AssessmentViewModel;
 import com.logiconets.c196_nick_albers.viewmodel.CourseEditorViewModel;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,21 +17,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.logiconets.c196_nick_albers.utility.Constants.ASSESSMENT_ID_KEY;
 import static com.logiconets.c196_nick_albers.utility.Constants.COURSE_ID_KEY;
 
 public class CourseEditorActivity extends AppCompatActivity {
@@ -68,6 +57,12 @@ public class CourseEditorActivity extends AppCompatActivity {
     @BindView(R.id.course_notes)
     TextView mNotes;
 
+    @BindView(R.id.course_start_alarmSwitch)
+    Switch mStartAlarm;
+
+    @BindView(R.id.course_end_alarmSwitch)
+    Switch mEndAlarm;
+
     TextView mSelected;
     final Calendar calendar = Calendar.getInstance();
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
@@ -78,13 +73,10 @@ public class CourseEditorActivity extends AppCompatActivity {
     Menu mainMenu;
     MenuItem mToggleAlarm;
 
-    private static final int NOTIFICATION_ID = 1337;
-    private NotificationManager mNotificationManager;
-    private AlarmManager alarmManager;
-    private PendingIntent notifyPendingIntent;
     private boolean isArmed;
 
-    AlarmController alarmController;
+    AlarmController startAlarmController;
+    AlarmController endAlarmController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,19 +88,13 @@ public class CourseEditorActivity extends AppCompatActivity {
 
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_save_black);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         ButterKnife.bind(this);
         initViewModel();
 
-        alarmController = new AlarmController("Course 1", new Date(),this);
+        startAlarmController = new AlarmController("Course 1 Start", new Date(),this);
+        endAlarmController = new AlarmController("Course 1 End", new Date(),this);
 
-        Intent notifyIntent = new Intent(this, AlarmReceiver.class);
-        notifyPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_ID,
-                notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        isArmed = (PendingIntent.getBroadcast(this, NOTIFICATION_ID, notifyIntent,
-                PendingIntent.FLAG_NO_CREATE) != null);
-        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
     }
 
     @Override
@@ -165,11 +151,12 @@ public class CourseEditorActivity extends AppCompatActivity {
                 isArmed = !isArmed;
                 if (isArmed) {
                     mToggleAlarm.setIcon(R.drawable.ic_alarm_black);
+                    startAlarmController.setAlarmDate(convertStrToDate(mStartDate.getText().toString()));
+                    startAlarmController.setAlarm();
                 } else {
                     mToggleAlarm.setIcon(R.drawable.ic_snooze);
+                    startAlarmController.cancelAlarm();
                 }
-                //setAlarm();
-                alarmController.setAlarm();
                 return true;
             case R.id.action_assessments:
                 Intent intent=new Intent(this,AssessmentActivity.class);
@@ -203,14 +190,34 @@ public class CourseEditorActivity extends AppCompatActivity {
         finish();
     }
 
+    @OnClick(R.id.course_start_alarmSwitch)
+    public void onClickStartAlarm(){
+        if(mStartAlarm.isChecked()){
+            startAlarmController.setAlarmDate(convertStrToDate(mStartDate.getText().toString()));
+            startAlarmController.setAlarm();
+        }
+        else{
+            startAlarmController.cancelAlarm();
+        }
+    }
+
+    @OnClick(R.id.course_end_alarmSwitch)
+    public void onClickEndAlarm(){
+        if(mEndAlarm.isChecked()){
+            endAlarmController.setAlarmDate(convertStrToDate(mEndDate.getText().toString()));
+            endAlarmController.setAlarm();
+        }
+        else{
+            endAlarmController.cancelAlarm();
+        }
+    }
+
     @OnClick(R.id.course_startDate)
     public void onClickStartDate() {
         mSelected = mStartDate;
-        try {
-            calendar.setTime(sdf.parse(mStartDate.getText().toString()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
+        calendar.setTime(convertStrToDate(mStartDate.getText().toString()));
+
         new DatePickerDialog(CourseEditorActivity.this,date,calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
@@ -218,11 +225,9 @@ public class CourseEditorActivity extends AppCompatActivity {
     @OnClick(R.id.course_endDate)
     public void onClickEndDate() {
         mSelected = mEndDate;
-        try {
-            calendar.setTime(sdf.parse(mEndDate.getText().toString()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
+        calendar.setTime(convertStrToDate(mEndDate.getText().toString()));
+
         new DatePickerDialog(CourseEditorActivity.this,date,calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
@@ -237,6 +242,17 @@ public class CourseEditorActivity extends AppCompatActivity {
                 .startChooser();
     }
 
+    private Date convertStrToDate(String strDate){
+        Date convDate = null;
+        try {
+            convDate = sdf.parse(strDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return convDate;
+    }
+/*
     private void setAlarm(){
         //Testing alarmManager setup at SaveAndReturn
         String toastMessage;
@@ -276,5 +292,5 @@ public class CourseEditorActivity extends AppCompatActivity {
         }
         Toast.makeText(this,toastMessage,Toast.LENGTH_SHORT).show();
         //End alarmManager setup
-    }
+    }*/
 }

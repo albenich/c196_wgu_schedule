@@ -67,9 +67,19 @@
         android:clickable="true"
         android:focusable="false"
         android:inputType="date"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/course_start_alarmSwitch"
         app:layout_constraintStart_toEndOf="@+id/startDate_textView"
         app:layout_constraintTop_toBottomOf="@+id/course_title" />
+
+    <Switch
+        android:id="@+id/course_start_alarmSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/course_startDate"
+        android:text="Notify Me"
+        android:layout_margin="16dp" />
+
 
     <TextView
         android:id="@+id/endDate_textView"
@@ -96,9 +106,18 @@
         android:inputType="date"
         android:clickable="true"
         android:focusable="false"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/course_end_alarmSwitch"
         app:layout_constraintStart_toEndOf="@id/endDate_textView"
         app:layout_constraintTop_toBottomOf="@+id/course_startDate" />
+
+    <Switch
+        android:id="@+id/course_end_alarmSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/course_endDate"
+        android:text="Notify Me"
+        android:layout_margin="16dp" />
 
     <TextView
         android:id="@+id/status_textView"
