@@ -11,9 +11,11 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 import static android.content.Context.ALARM_SERVICE;
 import static android.content.Context.NOTIFICATION_SERVICE;
+import static com.logiconets.c196_nick_albers.utility.Constants.ALARM_NOTIFICATION_ID;
 import static com.logiconets.c196_nick_albers.utility.Constants.ALARM_TEXT_ID;
 import static com.logiconets.c196_nick_albers.utility.Constants.ALARM_TITLE_ID;
 import static com.logiconets.c196_nick_albers.utility.Constants.NOTIFICATION_ID;
@@ -28,21 +30,24 @@ public class AlarmController {
     private NotificationManager mNotificationManager;
     private SimpleDateFormat sdf;
     private Context context;
+    private int notificationId;
 
     public AlarmController(String alarmTitle, Date alarmDate, Context context) {
         this.isArmed = false;
         this.alarmTitle = alarmTitle;
         this.alarmDate = alarmDate;
         this.context = context;
+        notificationId = new Random().nextInt(10000);
 
         mNotificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
 
         intent = new Intent(context, AlarmReceiver.class)
                 .putExtra(ALARM_TITLE_ID,alarmTitle)
-                .putExtra(ALARM_TEXT_ID,alarmTitle + " is coming up soon!");
-        notifyPendingIntent = PendingIntent.getBroadcast(context, NOTIFICATION_ID,
+                .putExtra(ALARM_TEXT_ID,alarmTitle + " is coming up soon!")
+                .putExtra(ALARM_NOTIFICATION_ID, notificationId);
+        notifyPendingIntent = PendingIntent.getBroadcast(context, notificationId,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        isArmed = (PendingIntent.getBroadcast(context, NOTIFICATION_ID, intent,
+        isArmed = (PendingIntent.getBroadcast(context, notificationId, intent,
                 PendingIntent.FLAG_NO_CREATE) != null);
         alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         sdf = new SimpleDateFormat("MM/dd/yyyy");

@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.logiconets.c196_nick_albers.utility.AlarmController;
 import com.logiconets.c196_nick_albers.viewmodel.AssessmentEditorViewModel;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,11 +15,13 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.DatePicker;
 import android.widget.RadioGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import butterknife.BindView;
@@ -42,10 +45,14 @@ public class AssessmentEditorActivity extends AppCompatActivity {
     @BindView(R.id.assessment_course)
     TextView mCourseId;
 
+    @BindView(R.id.assessment_alarmSwitch)
+    Switch mAlarmSwitch;
+
     AssessmentEditorViewModel mViewModel;
     Boolean mNewAssessment;
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
     Calendar calendar = new GregorianCalendar();
+    AlarmController alarmController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +66,7 @@ public class AssessmentEditorActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         
         initViewModel();
+
     }
 
     private void initViewModel() {
@@ -132,6 +140,17 @@ public class AssessmentEditorActivity extends AppCompatActivity {
         }
         finish();
     }
+    @OnClick(R.id.assessment_alarmSwitch)
+    public void onClickAlarmSwitch(){
+        if(mAlarmSwitch.isChecked()){
+            alarmController = new AlarmController("Assessment: " + mTitle.getText().toString(),
+                    convertStrToDate(mDueDate.getText().toString()),this);
+            alarmController.setAlarm();
+        }
+        else{
+            alarmController.cancelAlarm();
+        }
+    }
 
     @OnClick(R.id.assessment_dueDate)
     public void onClickStartDate() {
@@ -143,5 +162,14 @@ public class AssessmentEditorActivity extends AppCompatActivity {
         new DatePickerDialog(AssessmentEditorActivity.this,date,calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
+    private Date convertStrToDate(String strDate){
+        Date convDate = null;
+        try {
+            convDate = sdf.parse(strDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
+        return convDate;
+    }
 }

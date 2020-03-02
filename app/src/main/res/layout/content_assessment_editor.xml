@@ -64,9 +64,18 @@
         android:inputType="date"
         android:clickable="true"
         android:focusable="false"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/assessment_alarmSwitch"
         app:layout_constraintStart_toEndOf="@id/dueDate_textView"
         app:layout_constraintTop_toBottomOf="@+id/assessment_title" />
+
+    <Switch
+        android:id="@+id/assessment_alarmSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/assessment_dueDate"
+        android:text="Notify Me"
+        android:layout_margin="16dp" />
 
     <TextView
         android:id="@+id/type_textView"

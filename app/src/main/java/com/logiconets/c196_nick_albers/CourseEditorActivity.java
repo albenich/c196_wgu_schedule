@@ -252,45 +252,5 @@ public class CourseEditorActivity extends AppCompatActivity {
 
         return convDate;
     }
-/*
-    private void setAlarm(){
-        //Testing alarmManager setup at SaveAndReturn
-        String toastMessage;
-        Date testDate = null;
-        Calendar today = Calendar.getInstance();
-        today.clear(Calendar.HOUR);
-        today.clear(Calendar.HOUR_OF_DAY);
-        today.clear(Calendar.MINUTE);
-        today.clear(Calendar.SECOND);
-        today.clear(Calendar.MILLISECOND);
-        Date dateOnly = new Date(today.getTimeInMillis() - today.get(Calendar.HOUR_OF_DAY) * 60 * 60 * 1000);
-        try {
-            Log.i("Test", isArmed ? "Alarm Enabled":"Alarm Disabled");
-            Log.i("Test","mStartDate = " + mStartDate.getText().toString());
-            testDate = sdf.parse(mStartDate.getText().toString());
-            Log.i("Test","sdf.parse = " + testDate.toString());
-            Log.i("Test","Current Time = " + Calendar.getInstance().getTime().toString());
-            Log.i("Test","today var = " + dateOnly.toString());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        if(isArmed){
-            toastMessage = "Start Date before current Date";
-            if(testDate.after(dateOnly) || testDate.equals(dateOnly)) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, testDate.getTime(), notifyPendingIntent);
-                }
-                toastMessage = mTitle.getText() + " Notification is On!";
-            }
-        }
-        else{
-            if(alarmManager != null){
-                alarmManager.cancel(notifyPendingIntent);
-            }
-            mNotificationManager.cancelAll();
-            toastMessage = mTitle.getText() + " Notification is Off!";
-        }
-        Toast.makeText(this,toastMessage,Toast.LENGTH_SHORT).show();
-        //End alarmManager setup
-    }*/
+
 }

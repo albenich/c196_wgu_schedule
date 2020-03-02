@@ -17,31 +17,35 @@ import com.logiconets.c196_nick_albers.CoursesActivity;
 import com.logiconets.c196_nick_albers.MainActivity;
 import com.logiconets.c196_nick_albers.R;
 
+import java.util.Random;
+
+import static com.logiconets.c196_nick_albers.utility.Constants.ALARM_NOTIFICATION_ID;
 import static com.logiconets.c196_nick_albers.utility.Constants.ALARM_TEXT_ID;
 import static com.logiconets.c196_nick_albers.utility.Constants.ALARM_TITLE_ID;
 import static com.logiconets.c196_nick_albers.utility.Constants.GROUP_KEY;
 
 public class AlarmReceiver extends BroadcastReceiver {
     private NotificationManager mNotificationManager;
-    private static final int NOTIFICATION_ID = 1337;
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
-//    private static String contentTitle;
-//    private static String contentText;
+    private  String contentTitle;
+    private  String contentText;
+    private int notificationId;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         createNotificationChannel(context);
         mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        String contentTitle = intent.getStringExtra(ALARM_TITLE_ID);
-        String contentText = intent.getStringExtra(ALARM_TEXT_ID);
+        contentTitle = intent.getStringExtra(ALARM_TITLE_ID);
+        contentText = intent.getStringExtra(ALARM_TEXT_ID);
+        notificationId = intent.getIntExtra(ALARM_NOTIFICATION_ID,-1);
         Log.i("AlarmReceiver", "Title = " + contentTitle);
         Log.i("AlarmReceiver", "Text = " + contentText);
-        deliverNotification(context, contentTitle, contentText);
+        deliverNotification(context);
     }
 
-    private void deliverNotification(Context context, String contentTitle, String contentText){
+    private void deliverNotification(Context context){
         Intent contentIntent = new Intent(context, CoursesActivity.class);
-        PendingIntent contentPendingIntent = PendingIntent.getActivity(context, NOTIFICATION_ID,
+        PendingIntent contentPendingIntent = PendingIntent.getActivity(context, notificationId,
                 contentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,PRIMARY_CHANNEL_ID)
@@ -53,7 +57,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL);
 
-        mNotificationManager.notify(NOTIFICATION_ID, builder.build());
+        mNotificationManager.notify(notificationId, builder.build());
     }
 
     public void createNotificationChannel(Context context) {
