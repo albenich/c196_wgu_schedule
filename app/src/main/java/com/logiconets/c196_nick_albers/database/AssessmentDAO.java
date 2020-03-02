@@ -18,7 +18,7 @@ public interface AssessmentDAO {
     void insertAll(List<AssessmentEntity> assessment);
 
     @Delete
-    void deleteassessment(AssessmentEntity assessment);
+    void deleteAssessment(AssessmentEntity assessment);
 
     @Query("DELETE FROM assessment")
     void deleteAll();

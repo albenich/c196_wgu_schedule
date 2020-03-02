@@ -67,6 +67,8 @@ public class CourseEditorActivity extends AppCompatActivity {
     final Calendar calendar = Calendar.getInstance();
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
+    int mTermId;
+
     private CourseEditorViewModel mViewModel;
 
     private boolean mNewCourse;
@@ -126,6 +128,7 @@ public class CourseEditorActivity extends AppCompatActivity {
             mCmEmail.setText(courseEntity.getCmEmail());
             mCmPhone.setText(courseEntity.getCmPhone());
             mNotes.setText(courseEntity.getNotes());
+            mTermId = courseEntity.getTermId(); //fix later
         });
 
     }
@@ -183,7 +186,7 @@ public class CourseEditorActivity extends AppCompatActivity {
         try {
             mViewModel.saveCourse(mTitle.getText().toString(),sdf.parse(mStartDate.getText().toString()),
                     sdf.parse(mEndDate.getText().toString()),mStatus.getText().toString(),mCmName.getText().toString(),
-                    mCmEmail.getText().toString(),mCmPhone.getText().toString(),mNotes.getText().toString());
+                    mCmEmail.getText().toString(),mCmPhone.getText().toString(),mNotes.getText().toString(),mTermId); //fix later
         } catch (ParseException e) {
             e.printStackTrace();
         }

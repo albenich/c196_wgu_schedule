@@ -4,15 +4,20 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.logiconets.c196_nick_albers.database.CourseEntity;
 import com.logiconets.c196_nick_albers.utility.AlarmController;
 import com.logiconets.c196_nick_albers.viewmodel.AssessmentEditorViewModel;
+import com.logiconets.c196_nick_albers.viewmodel.CourseViewModel;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.DatePicker;
 import android.widget.RadioGroup;
 import android.widget.Switch;
@@ -20,9 +25,11 @@ import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,6 +70,8 @@ public class AssessmentEditorActivity extends AppCompatActivity {
 
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_save_black);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
         ButterKnife.bind(this);
         
         initViewModel();
@@ -132,12 +141,8 @@ public class AssessmentEditorActivity extends AppCompatActivity {
 
     private void saveAndReturn(){
         String typeString = mType.getCheckedRadioButtonId() == R.id.performanceRadio ? "Performance" : "Objective";
-        try {
-            mViewModel.saveAssessment(mTitle.getText().toString(),typeString,
-                    sdf.parse(mDueDate.getText().toString()),Integer.parseInt(mCourseId.getText().toString()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        mViewModel.saveAssessment(mTitle.getText().toString(),typeString,
+                   convertStrToDate(mDueDate.getText().toString()),Integer.parseInt(mCourseId.getText().toString()));
         finish();
     }
     @OnClick(R.id.assessment_alarmSwitch)
@@ -154,11 +159,8 @@ public class AssessmentEditorActivity extends AppCompatActivity {
 
     @OnClick(R.id.assessment_dueDate)
     public void onClickStartDate() {
-       try {
-            calendar.setTime(sdf.parse(mDueDate.getText().toString()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        calendar.setTime(convertStrToDate(mDueDate.getText().toString()));
+
         new DatePickerDialog(AssessmentEditorActivity.this,date,calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
@@ -169,7 +171,6 @@ public class AssessmentEditorActivity extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
         return convDate;
     }
 }

@@ -14,6 +14,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.logiconets.c196_nick_albers.AssessmentEditorActivity;
 import com.logiconets.c196_nick_albers.R;
 import com.logiconets.c196_nick_albers.database.AssessmentEntity;
+import com.logiconets.c196_nick_albers.database.CourseEntity;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class AssessmentListAdapter extends RecyclerView.Adapter<AssessmentListAd
     private final List<AssessmentEntity> mAssessments;
     private final Context mContext;
     private final LayoutInflater mInflater;
+
 
     public AssessmentListAdapter(List<AssessmentEntity> mAssessments, Context mContext) {
         this.mAssessments = mAssessments;

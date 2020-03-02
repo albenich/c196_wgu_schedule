@@ -29,6 +29,9 @@ public interface CourseDAO {
     @Query("SELECT * from course WHERE id = :id")
     CourseEntity getCourseById(int id);
 
+    @Query("SELECT * FROM course WHERE termId = :termId")
+    LiveData<List<CourseEntity>> getAssessmentsByCourseId(int termId);
+
     @Query("SELECT COUNT(*) FROM course")
     int getCount();
 

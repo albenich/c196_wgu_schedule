@@ -18,7 +18,6 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 import static com.logiconets.c196_nick_albers.utility.Constants.ALARM_NOTIFICATION_ID;
 import static com.logiconets.c196_nick_albers.utility.Constants.ALARM_TEXT_ID;
 import static com.logiconets.c196_nick_albers.utility.Constants.ALARM_TITLE_ID;
-import static com.logiconets.c196_nick_albers.utility.Constants.NOTIFICATION_ID;
 
 public class AlarmController {
     private Intent intent;

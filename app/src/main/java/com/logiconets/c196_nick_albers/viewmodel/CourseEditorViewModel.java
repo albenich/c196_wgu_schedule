@@ -33,7 +33,7 @@ public class CourseEditorViewModel extends AndroidViewModel {
     }
 
     public void saveCourse(String CourseText,Date startDate, Date endDate, String status, String cmName,
-                           String cmEmail, String cmPhone, String notes) {
+                           String cmEmail, String cmPhone, String notes, int termId) {
         CourseEntity course = mLiveCourse.getValue();
 
         if(course == null){
@@ -41,7 +41,7 @@ public class CourseEditorViewModel extends AndroidViewModel {
                 return;
             }
             course = new CourseEntity(CourseText.trim(),startDate, endDate,status,
-            cmName,cmPhone,cmEmail,notes);
+            cmName,cmPhone,cmEmail,notes,termId);
         }else{
             course.setTitle(CourseText.trim());
             course.setStartDate(startDate);
@@ -51,6 +51,7 @@ public class CourseEditorViewModel extends AndroidViewModel {
             course.setCmEmail(cmEmail.trim());
             course.setCmPhone(cmPhone.trim());
             course.setNotes(notes.trim());
+            course.setTermId(termId);
         }
         mRepository.insertCourse(course);
     }

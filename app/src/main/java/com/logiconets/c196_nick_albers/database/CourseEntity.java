@@ -3,6 +3,7 @@ package com.logiconets.c196_nick_albers.database;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
@@ -44,7 +45,12 @@ public class CourseEntity {
     @ColumnInfo(name="notes")
     private String notes;
 
-    public CourseEntity(int courseId, String title, Date startDate, Date anticipatedEndDate, String status, String cmName, String cmPhone, String cmEmail, String notes) {
+    @ForeignKey(entity = TermEntity.class, parentColumns = "id", childColumns = "termId")
+    @NonNull
+    @ColumnInfo(name = "termId")
+    private int termId;
+
+    public CourseEntity(int courseId, String title, Date startDate, Date anticipatedEndDate, String status, String cmName, String cmPhone, String cmEmail, String notes,int termId) {
         this.courseId = courseId;
         this.title = title;
         this.startDate = startDate;
@@ -54,10 +60,11 @@ public class CourseEntity {
         this.cmPhone = cmPhone;
         this.cmEmail = cmEmail;
         this.notes = notes;
+        this.termId = termId;
     }
 
     @Ignore
-    public CourseEntity(String title, Date startDate, Date anticipatedEndDate, String status, String cmName, String cmPhone, String cmEmail, String notes) {
+    public CourseEntity(String title, Date startDate, Date anticipatedEndDate, String status, String cmName, String cmPhone, String cmEmail, String notes, int termId) {
         this.title = title;
         this.startDate = startDate;
         this.anticipatedEndDate = anticipatedEndDate;
@@ -66,6 +73,7 @@ public class CourseEntity {
         this.cmPhone = cmPhone;
         this.cmEmail = cmEmail;
         this.notes = notes;
+        this.termId = termId;
     }
     @Ignore
     public CourseEntity() {
@@ -156,4 +164,11 @@ public class CourseEntity {
         this.courseId = courseId;
     }
 
+    public int getTermId() {
+        return termId;
+    }
+
+    public void setTermId(int termId) {
+        this.termId = termId;
+    }
 }

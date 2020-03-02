@@ -51,7 +51,7 @@ public class PopulateData {
         startCourse.set(2020,3,1);
         endCourse.set(2020,6,25);
         CourseEntity c1 = new CourseEntity(1,"CourseEntity 1",startCourse.getTime(),endCourse.getTime(),"In Progress"
-                ,"Dana","615-808-3843","dana.cobbs@wgu.edu","");
+                ,"Dana","615-808-3843","dana.cobbs@wgu.edu","",1);
 
         if(courses.isEmpty())
             courses.add(c1);
