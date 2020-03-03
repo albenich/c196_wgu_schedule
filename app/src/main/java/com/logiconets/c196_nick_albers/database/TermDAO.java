@@ -31,4 +31,10 @@ public interface TermDAO {
 
     @Query("SELECT COUNT(*) FROM term")
     int getCount();
+
+    @Query("SELECT * FROM term")
+    LiveData<List<TermsAndCourses>> loadTermsAndCourses();
+
+    @Query("SELECT * from term WHERE term.id = :id")
+    TermsAndCourses getTermAndCoursesById(int id);
 }

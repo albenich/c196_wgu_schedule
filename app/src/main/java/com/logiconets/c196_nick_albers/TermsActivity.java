@@ -6,9 +6,12 @@ import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
-import com.logiconets.c196_nick_albers.database.TermEntity;
+import com.logiconets.c196_nick_albers.database.CourseEntity;
+import com.logiconets.c196_nick_albers.database.TermsAndCourses;
 import com.logiconets.c196_nick_albers.ui.TermListAdapter;
+import com.logiconets.c196_nick_albers.viewmodel.CourseViewModel;
 import com.logiconets.c196_nick_albers.viewmodel.TermViewModel;
 
 import androidx.annotation.NonNull;
@@ -37,9 +40,12 @@ public class TermsActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private List<TermEntity> termData = new ArrayList<>();
+    private List<TermsAndCourses> termData = new ArrayList<>();
+ //   private List<CourseEntity> courseData = new ArrayList<>();
+
     private TermListAdapter mAdapter;
     private TermViewModel mViewModel;
+ //   private CourseViewModel courseViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,12 +55,12 @@ public class TermsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         ButterKnife.bind(this);
+
         initRecyclerView();
         initViewModel();
-
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+   //     Toast.makeText(this,"Size is " + courseViewModel.mCourses.hasActiveObservers(),Toast.LENGTH_LONG).show();
+   //     Log.i("CourseData", "CourseData1 size = " + courseData.size());
     }
 
     @Override
@@ -65,10 +71,10 @@ public class TermsActivity extends AppCompatActivity {
     }
 
     private void initViewModel() {
-        final Observer<List<TermEntity>> termObserver =
-                new Observer<List<TermEntity>>() {
+        final Observer<List<TermsAndCourses>> termObserver =
+                new Observer<List<TermsAndCourses>>() {
                     @Override
-                    public void onChanged(List<TermEntity> termEntities) {
+                    public void onChanged(List<TermsAndCourses> termEntities) {
                         termData.clear();
                         termData.addAll(termEntities);
 
@@ -80,9 +86,21 @@ public class TermsActivity extends AppCompatActivity {
                             mAdapter.notifyDataSetChanged();
                     }
                 };
-
+   /*     final Observer<List<CourseEntity>> courseObserver =
+                new Observer<List<CourseEntity>>() {
+            @Override
+            public void onChanged(List<CourseEntity> courseEntities) {
+                courseData.clear();
+                courseData.addAll(courseEntities);
+                Log.i("CourseData", "CourseData2 size = " + courseData.size());
+            }
+        };
+        Log.i("CourseData", "CourseData3 size = " + courseData.size()); */
         mViewModel = new ViewModelProvider(this).get(TermViewModel.class);
         mViewModel.mTerms.observe(this,termObserver);
+/*
+        courseViewModel = new ViewModelProvider(this).get(CourseViewModel.class);
+        courseViewModel.mCourses.observe(this, courseObserver); */
     }
 
     private void initRecyclerView(){

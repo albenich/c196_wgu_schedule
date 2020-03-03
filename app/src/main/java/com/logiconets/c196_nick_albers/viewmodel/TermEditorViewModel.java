@@ -8,15 +8,19 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.logiconets.c196_nick_albers.database.AppRepository;
+import com.logiconets.c196_nick_albers.database.CourseEntity;
 import com.logiconets.c196_nick_albers.database.TermEntity;
+import com.logiconets.c196_nick_albers.database.TermsAndCourses;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class TermEditorViewModel extends AndroidViewModel {
 
-    public MutableLiveData<TermEntity> mLiveTerm = new MutableLiveData<>();
+    public MutableLiveData<TermsAndCourses> mLiveTerm = new MutableLiveData<>();
     private AppRepository mRepository;
     private Executor executor = Executors.newSingleThreadExecutor();
 
@@ -29,25 +33,26 @@ public class TermEditorViewModel extends AndroidViewModel {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                TermEntity term = mRepository.getTermById(termId);
+                TermsAndCourses term = mRepository.getTermAndCoursesById(termId);
                 mLiveTerm.postValue(term);
             }
         });
     }
 
     public void saveTerm(String termText,Date startDate, Date endDate) {
-        TermEntity term = mLiveTerm.getValue();
+        TermsAndCourses term = mLiveTerm.getValue();
 
         if(term == null){
             if(TextUtils.isEmpty(termText.trim())){
                 return;
             }
-            term = new TermEntity(termText.trim(),startDate, endDate);
+            TermEntity termOnly = new TermEntity(termText.trim(),startDate, endDate);
+            term = new TermsAndCourses(termOnly, new ArrayList<CourseEntity>());
         }else{
-            term.setTitle(termText.trim());
-            term.setStartDate(startDate);
-            term.setEndDate(endDate);
+            term.getTerm().setTitle(termText.trim());
+            term.getTerm().setStartDate(startDate);
+            term.getTerm().setEndDate(endDate);
         }
-        mRepository.insertTerm(term);
+        mRepository.insertTerm(term.getTerm());
     }
 }

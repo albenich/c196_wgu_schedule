@@ -4,12 +4,14 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Transformations;
 
 import com.logiconets.c196_nick_albers.utility.PopulateData;
 
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.function.Function;
 
 public class AppRepository {
     private static AppRepository ourInstance;
@@ -17,6 +19,7 @@ public class AppRepository {
     public LiveData<List<TermEntity>> mTerms;
     public LiveData<List<CourseEntity>> mCourses;
     public LiveData<List<AssessmentEntity>> mAssessments;
+    public LiveData<List<TermsAndCourses>> mTermsAndCourses;
 
     private AppDatabase mDb;
     private Executor executor = Executors.newSingleThreadExecutor();
@@ -34,6 +37,7 @@ public class AppRepository {
         mTerms = getAllTerms();
         mCourses = getAllCourses();
         mAssessments = getAllAssessments();
+        mTermsAndCourses = getAllTermsAndCourses();
         Log.i("AppRepository",mTerms == null ? "Empty mTerms" : "mTerms Populated!");
     }
 
@@ -57,6 +61,7 @@ public class AppRepository {
 //Modules for TermEntity Querying
     private LiveData<List<TermEntity>> getAllTerms(){
         return mDb.termDAO().getAll();
+
     }
 
     public TermEntity getTermById(int termId) {
@@ -88,4 +93,12 @@ public class AppRepository {
     public void insertAssessment(final AssessmentEntity assessment){
         executor.execute(() -> mDb.assessmentDAO().insert(assessment));
     }
+
+//Modules for TermsAndCourses
+    private LiveData<List<TermsAndCourses>> getAllTermsAndCourses() { return mDb.termDAO().loadTermsAndCourses(); }
+
+    public TermsAndCourses getTermAndCoursesById(int termId) {
+        return mDb.termDAO().getTermAndCoursesById(termId);
+    }
+
 }

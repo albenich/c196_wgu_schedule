@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.text.ParseException;
@@ -63,15 +64,16 @@ public class TermEditorActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         initViewModel();
+        Toast.makeText(this, mViewModel.mLiveTerm.getValue().getCourses().get(0).getTitle(),Toast.LENGTH_LONG).show();
     }
 
     private void initViewModel(){
         mViewModel = new ViewModelProvider(this).get(TermEditorViewModel.class);
 
         mViewModel.mLiveTerm.observe(this, termEntity ->{
-            mTitle.setText(termEntity.getTitle());
-            mStartDate.setText(sdf.format(termEntity.getStartDate()));
-            mEndDate.setText(sdf.format(termEntity.getEndDate()));
+            mTitle.setText(termEntity.getTerm().getTitle());
+            mStartDate.setText(sdf.format(termEntity.getTerm().getStartDate()));
+            mEndDate.setText(sdf.format(termEntity.getTerm().getEndDate()));
             });
 
         Bundle extras = getIntent().getExtras();

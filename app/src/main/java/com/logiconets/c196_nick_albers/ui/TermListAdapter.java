@@ -13,6 +13,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.logiconets.c196_nick_albers.TermEditorActivity;
 import com.logiconets.c196_nick_albers.R;
 import com.logiconets.c196_nick_albers.database.TermEntity;
+import com.logiconets.c196_nick_albers.database.TermsAndCourses;
 
 import java.util.List;
 
@@ -23,11 +24,11 @@ import static com.logiconets.c196_nick_albers.utility.Constants.TERM_ID_KEY;
 
 public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.TermViewHolder> {
 
-    private final List<TermEntity> mTerms;
+    private final List<TermsAndCourses> mTerms;
     private final Context mContext;
     private final LayoutInflater mInflater;
 
-    public TermListAdapter(List<TermEntity> mTerms, Context mContext) {
+    public TermListAdapter(List<TermsAndCourses> mTerms, Context mContext) {
         this.mTerms = mTerms;
         this.mContext = mContext;
         this.mInflater = LayoutInflater.from(mContext);
@@ -56,12 +57,12 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.TermVi
     @Override
     public void onBindViewHolder(TermViewHolder holder, int position) {
 
-        final TermEntity term = mTerms.get(position);
-        holder.mTextView.setText(term.getTitle());
+        final TermsAndCourses term = mTerms.get(position);
+        holder.mTextView.setText(term.getTerm().getTitle());
 
         holder.mFab.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, TermEditorActivity.class);
-            intent.putExtra(TERM_ID_KEY, term.getTitleId());
+            intent.putExtra(TERM_ID_KEY, term.getTerm().getTitleId());
             mContext.startActivity(intent);
         });
     }

@@ -2,11 +2,14 @@ package com.logiconets.c196_nick_albers.database;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
+import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.Relation;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity(tableName = "term")
 public class TermEntity {
@@ -99,4 +102,5 @@ public class TermEntity {
     public void setTitleId(int titleId) {
         this.titleId = titleId;
     }
+    
 }
