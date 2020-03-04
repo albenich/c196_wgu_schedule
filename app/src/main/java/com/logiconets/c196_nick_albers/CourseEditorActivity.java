@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ShareCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -205,8 +206,12 @@ public class CourseEditorActivity extends AppCompatActivity {
         mSelected = mStartDate;
     //If Calendar is empty this will absolutely fail
     //Need to fix this so that new Courses can be created
-        calendar.setTime(convertStrToDate(mStartDate.getText().toString()));
-
+        if(TextUtils.isEmpty(mStartDate.getText())) {
+            calendar.setTime(new Date());
+        }
+        else {
+            calendar.setTime(convertStrToDate(mStartDate.getText().toString()));
+        }
         new DatePickerDialog(CourseEditorActivity.this,date,calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
@@ -214,9 +219,12 @@ public class CourseEditorActivity extends AppCompatActivity {
     @OnClick(R.id.course_endDate)
     public void onClickEndDate() {
         mSelected = mEndDate;
-
-        calendar.setTime(convertStrToDate(mEndDate.getText().toString()));
-
+        if(TextUtils.isEmpty(mEndDate.getText())) {
+            calendar.setTime(new Date());
+        }
+        else {
+            calendar.setTime(convertStrToDate(mEndDate.getText().toString()));
+        }
         new DatePickerDialog(CourseEditorActivity.this,date,calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
     }

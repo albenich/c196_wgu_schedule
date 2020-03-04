@@ -15,6 +15,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -159,8 +160,12 @@ public class AssessmentEditorActivity extends AppCompatActivity {
 
     @OnClick(R.id.assessment_dueDate)
     public void onClickStartDate() {
-        calendar.setTime(convertStrToDate(mDueDate.getText().toString()));
-
+        if(TextUtils.isEmpty(mDueDate.getText())) {
+            calendar.setTime(new Date());
+        }
+        else {
+            calendar.setTime(convertStrToDate(mDueDate.getText().toString()));
+        }
         new DatePickerDialog(AssessmentEditorActivity.this,date,calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
     }

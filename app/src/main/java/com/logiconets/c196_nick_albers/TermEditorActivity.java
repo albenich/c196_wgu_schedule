@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,10 +51,8 @@ public class TermEditorActivity extends AppCompatActivity {
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
     TextView mSelected;
-    //AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
     private TermEditorViewModel mViewModel;
-    private boolean mNewTerm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +71,7 @@ public class TermEditorActivity extends AppCompatActivity {
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_course_editor, menu);
+        getMenuInflater().inflate(R.menu.menu_term_editor, menu);
         return true;
     }
 
@@ -89,7 +88,6 @@ public class TermEditorActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if(extras == null) {
             setTitle(R.string.new_term);
-            mNewTerm = true;
         }
         else{
             setTitle(R.string.edit_term);
@@ -104,13 +102,13 @@ public class TermEditorActivity extends AppCompatActivity {
             case android.R.id.home:
                 saveAndReturn();
                 return true;
-            case R.id.action_assessments:
+            case R.id.action_courses:
                 Intent intent=new Intent(this,CoursesActivity.class);
                 intent.putExtra(TERM_ID_KEY,mViewModel.mLiveTerm.getValue().getTerm().getTitleId());
                 intent.putExtra("TermTitle",mViewModel.mLiveTerm.getValue().getTerm().getTitle());
                 startActivity(intent);
                 return true;
-            case R.id.action_add_assessments:
+            case R.id.action_add_courses:
                 Intent addIntent = new Intent(this,CourseEditorActivity.class);
                 addIntent.putExtra(TERM_ID_KEY,mViewModel.mLiveTerm.getValue().getTerm().getTitleId());
                 Log.i("TermEditor", "TermId = " + mViewModel.mLiveTerm.getValue().getTerm().getTitleId());
@@ -145,8 +143,12 @@ public class TermEditorActivity extends AppCompatActivity {
     @OnClick(R.id.term_startDate)
     public void onClickStartDate() {
         mSelected = mStartDate;
-        calendar.setTime(convertStrToDate(mStartDate.getText().toString()));
-
+        if(TextUtils.isEmpty(mStartDate.getText())) {
+            calendar.setTime(new Date());
+        }
+        else {
+            calendar.setTime(convertStrToDate(mStartDate.getText().toString()));
+        }
         new DatePickerDialog(TermEditorActivity.this,date,calendar.get(Calendar.YEAR),
                   calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
@@ -154,8 +156,12 @@ public class TermEditorActivity extends AppCompatActivity {
     @OnClick(R.id.term_endDate)
     public void onClickEndDate() {
         mSelected = mEndDate;
-        calendar.setTime(convertStrToDate(mEndDate.getText().toString()));
-
+        if(TextUtils.isEmpty(mEndDate.getText())) {
+            calendar.setTime(new Date());
+        }
+        else {
+            calendar.setTime(convertStrToDate(mEndDate.getText().toString()));
+        }
         new DatePickerDialog(TermEditorActivity.this,date,calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
     }

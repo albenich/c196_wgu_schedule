@@ -41,11 +41,9 @@ public class TermsActivity extends AppCompatActivity {
     }
 
     private List<TermsAndCourses> termData = new ArrayList<>();
- //   private List<CourseEntity> courseData = new ArrayList<>();
 
     private TermListAdapter mAdapter;
     private TermViewModel mViewModel;
- //   private CourseViewModel courseViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +57,6 @@ public class TermsActivity extends AppCompatActivity {
         initRecyclerView();
         initViewModel();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-   //     Toast.makeText(this,"Size is " + courseViewModel.mCourses.hasActiveObservers(),Toast.LENGTH_LONG).show();
-   //     Log.i("CourseData", "CourseData1 size = " + courseData.size());
     }
 
     @Override
@@ -86,28 +82,14 @@ public class TermsActivity extends AppCompatActivity {
                             mAdapter.notifyDataSetChanged();
                     }
                 };
-   /*     final Observer<List<CourseEntity>> courseObserver =
-                new Observer<List<CourseEntity>>() {
-            @Override
-            public void onChanged(List<CourseEntity> courseEntities) {
-                courseData.clear();
-                courseData.addAll(courseEntities);
-                Log.i("CourseData", "CourseData2 size = " + courseData.size());
-            }
-        };
-        Log.i("CourseData", "CourseData3 size = " + courseData.size()); */
+
         mViewModel = new ViewModelProvider(this).get(TermViewModel.class);
         mViewModel.mTerms.observe(this,termObserver);
-/*
-        courseViewModel = new ViewModelProvider(this).get(CourseViewModel.class);
-        courseViewModel.mCourses.observe(this, courseObserver); */
     }
 
     private void initRecyclerView(){
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
-      //  termData = mViewModel.mTerms;
-
     }
 }
