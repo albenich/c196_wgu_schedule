@@ -32,11 +32,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.logiconets.c196_nick_albers.utility.Constants.TERM_ID_KEY;
+
 public class CoursesActivity extends AppCompatActivity {
 
     private List<CourseEntity> courseData = new ArrayList<>();
     private CourseListAdapter mAdapter;
     private CourseViewModel mViewModel;
+    private int termId;
+    private String termTitle;
 
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
@@ -52,12 +56,17 @@ public class CoursesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_courses);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         ButterKnife.bind(this);
         initRecyclerView();
         initViewModel();
 
+        Intent intent = getIntent();
+        termId = intent.getIntExtra(TERM_ID_KEY,-1);
+        termTitle = intent.getStringExtra("TermTitle");
+        toolbar.setTitle(termId == -1 ? "Courses" : termTitle + " Courses");
+
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -72,8 +81,16 @@ public class CoursesActivity extends AppCompatActivity {
         final Observer<List<CourseEntity>> courseObserver =
                 courseEntities -> {
                     courseData.clear();
-                    courseData.addAll(courseEntities);
-
+                    if(termId != -1) {
+                        for(CourseEntity course : courseEntities){
+                            if(course.getTermId() == termId){
+                                courseData.add(course);
+                            }
+                        }
+                    }
+                    else {
+                        courseData.addAll(courseEntities);
+                    }
                     if (mAdapter == null) {
                         mAdapter = new CourseListAdapter(courseData,CoursesActivity.this);
                         mRecyclerView.setAdapter(mAdapter);

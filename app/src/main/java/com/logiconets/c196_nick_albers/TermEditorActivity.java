@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.logiconets.c196_nick_albers.viewmodel.TermEditorViewModel;
@@ -13,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -30,6 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.logiconets.c196_nick_albers.utility.Constants.COURSE_ID_KEY;
 import static com.logiconets.c196_nick_albers.utility.Constants.TERM_ID_KEY;
 
 public class TermEditorActivity extends AppCompatActivity {
@@ -58,6 +61,7 @@ public class TermEditorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_term_editor);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_save_black);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -65,6 +69,11 @@ public class TermEditorActivity extends AppCompatActivity {
 
         initViewModel();
 
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_course_editor, menu);
+        return true;
     }
 
     private void initViewModel(){
@@ -91,29 +100,34 @@ public class TermEditorActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        if(item.getItemId() == android.R.id.home){
-            try {
+        switch(item.getItemId()){
+            case android.R.id.home:
                 saveAndReturn();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            return true;
+                return true;
+            case R.id.action_assessments:
+                Intent intent=new Intent(this,CoursesActivity.class);
+                intent.putExtra(TERM_ID_KEY,mViewModel.mLiveTerm.getValue().getTerm().getTitleId());
+                intent.putExtra("TermTitle",mViewModel.mLiveTerm.getValue().getTerm().getTitle());
+                startActivity(intent);
+                return true;
+            case R.id.action_add_assessments:
+                Intent addIntent = new Intent(this,CourseEditorActivity.class);
+                addIntent.putExtra(TERM_ID_KEY,mViewModel.mLiveTerm.getValue().getTerm().getTitleId());
+                Log.i("TermEditor", "TermId = " + mViewModel.mLiveTerm.getValue().getTerm().getTitleId());
+                startActivity(addIntent);
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onBackPressed() {
-        try {
-            saveAndReturn();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        saveAndReturn();
     }
 
-    private void saveAndReturn() throws ParseException {
-        mViewModel.saveTerm(mTitle.getText().toString(),sdf.parse(mStartDate.getText().toString()),
-        sdf.parse(mEndDate.getText().toString()));
+    private void saveAndReturn() {
+        mViewModel.saveTerm(mTitle.getText().toString(),convertStrToDate(mStartDate.getText().toString()),
+        convertStrToDate(mEndDate.getText().toString()));
         finish();
     }
 
@@ -131,11 +145,8 @@ public class TermEditorActivity extends AppCompatActivity {
     @OnClick(R.id.term_startDate)
     public void onClickStartDate() {
         mSelected = mStartDate;
-        try {
-            calendar.setTime(sdf.parse(mStartDate.getText().toString()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        calendar.setTime(convertStrToDate(mStartDate.getText().toString()));
+
         new DatePickerDialog(TermEditorActivity.this,date,calendar.get(Calendar.YEAR),
                   calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
@@ -143,15 +154,21 @@ public class TermEditorActivity extends AppCompatActivity {
     @OnClick(R.id.term_endDate)
     public void onClickEndDate() {
         mSelected = mEndDate;
-        try {
-            calendar.setTime(sdf.parse(mEndDate.getText().toString()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        calendar.setTime(convertStrToDate(mEndDate.getText().toString()));
+
         new DatePickerDialog(TermEditorActivity.this,date,calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
+    private Date convertStrToDate(String strDate){
+        Date convDate = null;
+        try {
+            convDate = sdf.parse(strDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return convDate;
+    }
 }
 
 

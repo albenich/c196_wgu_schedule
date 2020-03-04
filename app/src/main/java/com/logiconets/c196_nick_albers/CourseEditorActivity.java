@@ -71,21 +71,13 @@ public class CourseEditorActivity extends AppCompatActivity {
 
     private CourseEditorViewModel mViewModel;
 
-    private boolean mNewCourse;
-    Menu mainMenu;
-    MenuItem mToggleAlarm;
-
-    private boolean isArmed;
-
-    AlarmController startAlarmController;
-    AlarmController endAlarmController;
+    AlarmController alarmController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_editor);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        mainMenu = toolbar.getMenu();
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_save_black);
@@ -93,16 +85,11 @@ public class CourseEditorActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
         initViewModel();
-
-        startAlarmController = new AlarmController("Course 1 Start", new Date(),this);
-        endAlarmController = new AlarmController("Course 1 End", new Date(),this);
-
-    }
+     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_course_editor, menu);
-        mToggleAlarm = mainMenu.findItem(R.id.toggle_alarm);
         return true;
     }
 
@@ -112,7 +99,6 @@ public class CourseEditorActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
             setTitle("New Course");
-            mNewCourse = true;
         } else {
             setTitle("Edit Course");
             int courseId = extras.getInt(COURSE_ID_KEY);
@@ -150,17 +136,6 @@ public class CourseEditorActivity extends AppCompatActivity {
             case android.R.id.home:
                 saveAndReturn();
                 return true;
-            case R.id.toggle_alarm:
-                isArmed = !isArmed;
-                if (isArmed) {
-                    mToggleAlarm.setIcon(R.drawable.ic_alarm_black);
-                    startAlarmController.setAlarmDate(convertStrToDate(mStartDate.getText().toString()));
-                    startAlarmController.setAlarm();
-                } else {
-                    mToggleAlarm.setIcon(R.drawable.ic_snooze);
-                    startAlarmController.cancelAlarm();
-                }
-                return true;
             case R.id.action_assessments:
                 Intent intent=new Intent(this,AssessmentActivity.class);
                 intent.putExtra("CourseId",mViewModel.mLiveCourse.getValue().getCourseId());
@@ -196,22 +171,22 @@ public class CourseEditorActivity extends AppCompatActivity {
     @OnClick(R.id.course_start_alarmSwitch)
     public void onClickStartAlarm(){
         if(mStartAlarm.isChecked()){
-            startAlarmController.setAlarmDate(convertStrToDate(mStartDate.getText().toString()));
-            startAlarmController.setAlarm();
+            alarmController = new AlarmController("Start of " + mTitle.getText(), convertStrToDate(mStartDate.getText().toString()),this);
+            alarmController.setAlarm();
         }
         else{
-            startAlarmController.cancelAlarm();
+            alarmController.cancelAlarm();
         }
     }
 
     @OnClick(R.id.course_end_alarmSwitch)
     public void onClickEndAlarm(){
         if(mEndAlarm.isChecked()){
-            endAlarmController.setAlarmDate(convertStrToDate(mEndDate.getText().toString()));
-            endAlarmController.setAlarm();
+            alarmController = new AlarmController("End of " + mTitle.getText(), convertStrToDate(mEndDate.getText().toString()),this);
+            alarmController.setAlarm();
         }
         else{
-            endAlarmController.cancelAlarm();
+            alarmController.cancelAlarm();
         }
     }
 
