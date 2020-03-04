@@ -30,6 +30,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.logiconets.c196_nick_albers.utility.Constants.COURSE_ID_KEY;
+import static com.logiconets.c196_nick_albers.utility.Constants.TERM_ID_KEY;
 
 public class CourseEditorActivity extends AppCompatActivity {
 
@@ -96,10 +97,19 @@ public class CourseEditorActivity extends AppCompatActivity {
     private void initViewModel() {
         mViewModel = new ViewModelProvider(this).get(CourseEditorViewModel.class);
 
+        Intent intent = getIntent();
+        int termId = intent.getIntExtra(TERM_ID_KEY,-1);
         Bundle extras = getIntent().getExtras();
+
         if (extras == null) {
             setTitle("New Course");
-        } else {
+        }
+        else if(termId != -1){
+            setTitle("New Course");
+            Log.i("CourseEditor", "CourseId = " + termId);
+            mTermId = termId;
+        }
+        else {
             setTitle("Edit Course");
             int courseId = extras.getInt(COURSE_ID_KEY);
             mViewModel.loadData(courseId);
@@ -193,7 +203,8 @@ public class CourseEditorActivity extends AppCompatActivity {
     @OnClick(R.id.course_startDate)
     public void onClickStartDate() {
         mSelected = mStartDate;
-
+    //If Calendar is empty this will absolutely fail
+    //Need to fix this so that new Courses can be created
         calendar.setTime(convertStrToDate(mStartDate.getText().toString()));
 
         new DatePickerDialog(CourseEditorActivity.this,date,calendar.get(Calendar.YEAR),
