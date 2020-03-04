@@ -12,9 +12,9 @@ import java.util.List;
 
 public class TermsAndCourses {
     @Embedded
-    TermEntity term;
+    private TermEntity term;
     @Relation(parentColumn = "id", entityColumn = "id")
-    List<CourseEntity> courses;
+    private List<CourseEntity> courses;
 
     public TermsAndCourses(TermEntity term, List<CourseEntity> courses) {
         this.term = term;

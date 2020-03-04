@@ -74,7 +74,7 @@ public class TermEditorActivity extends AppCompatActivity {
             mTitle.setText(termEntity.getTerm().getTitle());
             mStartDate.setText(sdf.format(termEntity.getTerm().getStartDate()));
             mEndDate.setText(sdf.format(termEntity.getTerm().getEndDate()));
-            Toast.makeText(this, mViewModel.mLiveTerm.getValue().getCourses().get(1).getTitle(),Toast.LENGTH_LONG).show();
+            Toast.makeText(this, termEntity.getCourses().toString(),Toast.LENGTH_LONG).show();
             });
 
         Bundle extras = getIntent().getExtras();

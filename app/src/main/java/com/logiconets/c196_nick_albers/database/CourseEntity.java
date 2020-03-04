@@ -46,7 +46,6 @@ public class CourseEntity {
     private String notes;
 
     @ForeignKey(entity = TermEntity.class, parentColumns = "id", childColumns = "termId")
-    @ForeignKey.Action
     @NonNull
     @ColumnInfo(name = "termId")
     private int termId;

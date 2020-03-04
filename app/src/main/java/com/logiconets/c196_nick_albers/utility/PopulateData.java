@@ -18,23 +18,17 @@ public class PopulateData {
     private static List<AssessmentEntity> assessments = new ArrayList<>();
 
     private static void initTerms(){
-        TermEntity t1 = new TermEntity();
-        TermEntity t2 = new TermEntity();
 
         Calendar startDate = new GregorianCalendar();
         Calendar endDate = new GregorianCalendar();
 
-        t1.setTitle("TermEntity 1");
         startDate.set(2020,2,1);
-        t1.setStartDate(startDate.getTime());
         endDate.set(2020,8,1);
-        t1.setEndDate(endDate.getTime());
+        TermEntity t1 = new TermEntity(1,"Term 1", startDate.getTime(),endDate.getTime());
 
-        t2.setTitle("TermEntity 2");
         startDate.add(GregorianCalendar.DATE,3);
-        t2.setStartDate(startDate.getTime());
         endDate.add(GregorianCalendar.WEEK_OF_YEAR,1);
-        t2.setEndDate(endDate.getTime());
+        TermEntity t2 = new TermEntity(2,"Term 2", startDate.getTime(),endDate.getTime());
 
         if(terms.isEmpty()) {
             terms.add(t1);
@@ -50,21 +44,33 @@ public class PopulateData {
 
         startCourse.set(2020,3,1);
         endCourse.set(2020,6,25);
-        CourseEntity c1 = new CourseEntity(1,"CourseEntity 1",startCourse.getTime(),endCourse.getTime(),"In Progress"
+        CourseEntity c1 = new CourseEntity(1,"C856 User Experience Design",startCourse.getTime(),endCourse.getTime(),"In Progress"
                 ,"Dana","615-808-3843","dana.cobbs@wgu.edu","",1);
+        CourseEntity c2 = new CourseEntity(2,"C196 Mobile Applications",startCourse.getTime(),endCourse.getTime(),"In Progress"
+                ,"Wanda","385-428-8723","wanda.burwick@wgu.edu","",2);
+        CourseEntity c3 = new CourseEntity(3,"C195 Software II",startCourse.getTime(),endCourse.getTime(),"In Progress"
+                ,"Wanda","385-428-8723","wanda.burwick@wgu.edu","",2);
 
         if(courses.isEmpty())
             courses.add(c1);
+        courses.add(c2);
+        courses.add(c3);
     }
 
     private static void initAssessments(){
         Calendar dueDate = GregorianCalendar.getInstance();
 
         dueDate.set(2020,6,25);
-        AssessmentEntity a1 = new AssessmentEntity("Mobile Project","Performance",dueDate.getTime(),1);
+        AssessmentEntity a1 = new AssessmentEntity("C856 Project","Performance",dueDate.getTime(),1);
+        AssessmentEntity a2 = new AssessmentEntity("C196 Mobile App","Objective",dueDate.getTime(),2);
+        AssessmentEntity a3 = new AssessmentEntity("Java Application","Performance",dueDate.getTime(),3);
+        AssessmentEntity a4 = new AssessmentEntity("Oracle Java Developer","Objective",dueDate.getTime(),3);
 
         if(assessments.isEmpty())
             assessments.add(a1);
+            assessments.add(a2);
+            assessments.add(a3);
+            assessments.add(a4);
     }
 
 
