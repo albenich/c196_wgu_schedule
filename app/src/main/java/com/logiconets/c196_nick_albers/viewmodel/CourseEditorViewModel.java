@@ -9,14 +9,18 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.logiconets.c196_nick_albers.database.AppRepository;
 import com.logiconets.c196_nick_albers.database.CourseEntity;
+import com.logiconets.c196_nick_albers.database.TermEntity;
 
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class CourseEditorViewModel extends AndroidViewModel {
 
     public MutableLiveData<CourseEntity> mLiveCourse = new MutableLiveData<>();
+    public MutableLiveData<List<TermEntity>> mLiveTerms = new MutableLiveData<>();
+
     private AppRepository mRepository;
     private Executor executor = Executors.newSingleThreadExecutor();
 

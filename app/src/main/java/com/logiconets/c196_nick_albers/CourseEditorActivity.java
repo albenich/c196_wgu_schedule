@@ -158,6 +158,7 @@ public class CourseEditorActivity extends AppCompatActivity {
                 addIntent.putExtra(COURSE_ID_KEY,mViewModel.mLiveCourse.getValue().getCourseId());
                 Log.i("CourseEditor", "CourseId = " + mViewModel.mLiveCourse.getValue().getCourseId());
                 startActivity(addIntent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -42,7 +42,6 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         @BindView(R.id.courseFab)
         FloatingActionButton mFab;
 
-
         public CourseViewHolder(View itemView){
             super(itemView);
             ButterKnife.bind(this,itemView);
@@ -66,6 +65,15 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
             intent.putExtra(COURSE_ID_KEY, course.getCourseId());
             mContext.startActivity(intent);
         });
+        /*
+//Use this instead of mFab to allow the entire list item to be clicked on instead of FAB
+        holder.mCourseView.setOnClickListener(v -> {
+            Intent intent1 = new Intent(mContext, CourseEditorActivity.class);
+            intent1.putExtra(COURSE_ID_KEY, course.getCourseId());
+            mContext.startActivity(intent1);
+
+
+        }); */
     }
 
     @Override
