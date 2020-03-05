@@ -4,12 +4,15 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.logiconets.c196_nick_albers.database.TermEntity;
 import com.logiconets.c196_nick_albers.utility.AlarmController;
 import com.logiconets.c196_nick_albers.viewmodel.CourseEditorViewModel;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ShareCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.text.TextUtils;
@@ -17,18 +20,24 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
 
 import static com.logiconets.c196_nick_albers.utility.Constants.COURSE_ID_KEY;
 import static com.logiconets.c196_nick_albers.utility.Constants.TERM_ID_KEY;
@@ -65,6 +74,9 @@ public class CourseEditorActivity extends AppCompatActivity {
     @BindView(R.id.course_end_alarmSwitch)
     Switch mEndAlarm;
 
+    private Spinner mTermCombo;
+    ArrayAdapter<String> adapter;
+
     TextView mSelected;
     final Calendar calendar = Calendar.getInstance();
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
@@ -87,7 +99,26 @@ public class CourseEditorActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
         initViewModel();
-     }
+
+
+    }
+
+    public void populateTermSpinner(){
+        mTermCombo = (Spinner) findViewById(R.id.term_spinner);
+        /*List<String> list = new ArrayList<String>();
+        list.add("list 1");
+        list.add("list 2");
+        list.add("list 3");*/
+
+        mViewModel.termList.observe(this, spinnerData -> {
+            Log.i("Spinner", "termList is this big " + spinnerData.size());
+            adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, spinnerData);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            mTermCombo.setAdapter(adapter);
+        });
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -97,6 +128,7 @@ public class CourseEditorActivity extends AppCompatActivity {
 
     private void initViewModel() {
         mViewModel = new ViewModelProvider(this).get(CourseEditorViewModel.class);
+        populateTermSpinner();
 
         Intent intent = getIntent();
         int termId = intent.getIntExtra(TERM_ID_KEY,-1);

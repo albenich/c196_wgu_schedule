@@ -37,4 +37,7 @@ public interface TermDAO {
 
     @Query("SELECT * from term WHERE term.id = :id")
     TermsAndCourses getTermAndCoursesById(int id);
+
+    @Query("SELECT title FROM term;")
+    List<String> getTermTitles();
 }

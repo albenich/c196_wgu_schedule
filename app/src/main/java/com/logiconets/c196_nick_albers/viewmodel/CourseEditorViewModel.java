@@ -2,9 +2,11 @@ package com.logiconets.c196_nick_albers.viewmodel;
 
 import android.app.Application;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.logiconets.c196_nick_albers.database.AppRepository;
@@ -19,14 +21,33 @@ import java.util.concurrent.Executors;
 public class CourseEditorViewModel extends AndroidViewModel {
 
     public MutableLiveData<CourseEntity> mLiveCourse = new MutableLiveData<>();
-    public MutableLiveData<List<TermEntity>> mLiveTerms = new MutableLiveData<>();
+    public LiveData<List<TermEntity>> mLiveTerms;;
 
     private AppRepository mRepository;
     private Executor executor = Executors.newSingleThreadExecutor();
+    public MutableLiveData<List<String>> termList = new MutableLiveData<>();
 
     public CourseEditorViewModel(@NonNull Application application){
         super(application);
         mRepository = AppRepository.getInstance(application.getApplicationContext());
+        fetchSpinnerItems();
+    }
+/*
+    public MutableLiveData<List<String>> fetchSpinnerItems() {
+        mLiveTerms = mRepository.mTerms;
+        for(TermEntity term : mLiveTerms.getValue()){
+            termList.getValue().add(term.getTitle());
+        }
+        return termList;
+
+    }
+*/
+
+    public void fetchSpinnerItems() {
+        executor.execute(() ->{
+            List<String> strings = mRepository.getTermTitles();
+            termList.postValue(strings);
+        });
     }
 
     public void loadData(int CourseId) {
