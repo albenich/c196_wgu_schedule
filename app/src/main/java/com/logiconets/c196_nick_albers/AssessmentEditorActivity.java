@@ -50,15 +50,16 @@ public class AssessmentEditorActivity extends AppCompatActivity {
     @BindView(R.id.typeRadio)
     RadioGroup mType;
 
-    @BindView(R.id.assessment_course)
-    TextView mCourseId;
+   // @BindView(R.id.assessment_course)
+   // TextView mCourseId;
 
     @BindView(R.id.assessment_alarmSwitch)
     Switch mAlarmSwitch;
 
+    int mCourseId;
+
     AssessmentEditorViewModel mViewModel;
-    Boolean mNewAssessment;
-    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+    final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
     Calendar calendar = new GregorianCalendar();
     AlarmController alarmController;
 
@@ -88,12 +89,11 @@ public class AssessmentEditorActivity extends AppCompatActivity {
 
         if(extras == null) {
             setTitle("New Assessment");
-            mNewAssessment = true;
         }
         else if(courseId != -1){
             setTitle("New Assessment");
             Log.i("CourseEditor", "CourseId = " + courseId);
-            mCourseId.setText(String.valueOf(courseId));
+            mCourseId = courseId;
         }
         else{
             setTitle("Edit Assessment");
@@ -109,7 +109,8 @@ public class AssessmentEditorActivity extends AppCompatActivity {
                 mType.check(R.id.objectiveRadio);
             }
             mDueDate.setText(sdf.format(assessmentEntity.getDueDate()));
-            mCourseId.setText(String.valueOf(assessmentEntity.getCourseId()));
+           // mCourseId.setText(String.valueOf(assessmentEntity.getCourseId()));
+            mCourseId = assessmentEntity.getCourseId();
         });
 
 
@@ -143,7 +144,7 @@ public class AssessmentEditorActivity extends AppCompatActivity {
     private void saveAndReturn(){
         String typeString = mType.getCheckedRadioButtonId() == R.id.performanceRadio ? "Performance" : "Objective";
         mViewModel.saveAssessment(mTitle.getText().toString(),typeString,
-                   convertStrToDate(mDueDate.getText().toString()),Integer.parseInt(mCourseId.getText().toString()));
+                   convertStrToDate(mDueDate.getText().toString()),mCourseId);
         finish();
     }
     @OnClick(R.id.assessment_alarmSwitch)
