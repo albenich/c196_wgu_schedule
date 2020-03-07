@@ -48,7 +48,7 @@ public class TermEditorActivity extends AppCompatActivity {
     TextView mEndDate;
 
     final Calendar calendar = Calendar.getInstance();
-    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+    final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
     TextView mSelected;
 
@@ -113,14 +113,13 @@ public class TermEditorActivity extends AppCompatActivity {
                 addIntent.putExtra(TERM_ID_KEY,mViewModel.mLiveTerm.getValue().getTerm().getTitleId());
                 Log.i("TermEditor", "TermId = " + mViewModel.mLiveTerm.getValue().getTerm().getTitleId());
                 startActivity(addIntent);
+                return true;
             case R.id.action_delete_term:
                 if(mViewModel.mLiveTerm.getValue().getCourses().size() > 0){
                     Toast.makeText(this,"Unable to delete a Term with Courses added",Toast.LENGTH_LONG).show();
                 }
                 else{
-                    finish();
-                    Log.i("TermEditor", mViewModel.mLiveTerm.getValue().getTerm().getTitle() + " is Deleted");
-                    mViewModel.deleteTerm(mViewModel.mLiveTerm.getValue().getTerm());
+                    mViewModel.confirmDelete(this, mViewModel.mLiveTerm.getValue().getTerm());
                 }
                 return true;
             default:

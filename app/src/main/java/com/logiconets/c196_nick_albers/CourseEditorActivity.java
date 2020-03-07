@@ -79,7 +79,7 @@ public class CourseEditorActivity extends AppCompatActivity {
 
     TextView mSelected;
     final Calendar calendar = Calendar.getInstance();
-    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+    final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
     int mTermId;
 
@@ -107,12 +107,12 @@ public class CourseEditorActivity extends AppCompatActivity {
         mTermCombo = (Spinner) findViewById(R.id.term_spinner);
 
         mViewModel.termList.observe(this, spinnerData -> {
-            Log.i("Spinner", "termList is this big " + spinnerData.size());
+            Log.i("Spinner", "Spinner Array is this big " + spinnerData.size());
             adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, spinnerData);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
             mTermCombo.setAdapter(adapter);
-            mTermCombo.setSelection(mTermId);
+            //mTermCombo.setSelection(mTermId);
         });
 
     }
@@ -191,8 +191,7 @@ public class CourseEditorActivity extends AppCompatActivity {
                 startActivity(addIntent);
                 return true;
             case R.id.action_delete_course:
-                finish();
-                mViewModel.deleteCourse(mViewModel.mLiveCourse.getValue());
+                mViewModel.confirmDelete(this,mViewModel.mLiveCourse.getValue());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -1,14 +1,19 @@
 package com.logiconets.c196_nick_albers.viewmodel;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.logiconets.c196_nick_albers.CoursesActivity;
 import com.logiconets.c196_nick_albers.database.AppRepository;
 import com.logiconets.c196_nick_albers.database.CourseEntity;
 import com.logiconets.c196_nick_albers.database.TermEntity;
@@ -44,16 +49,19 @@ public class CourseEditorViewModel extends AndroidViewModel {
 
     }
 */
-public void loadTerms() {
-    executor.execute(() -> {
-        List<Integer> termIds = mRepository.getTermIds();
-        mTermIds.postValue(termIds);
-    });
-}
+    public void loadTerms() {
+        executor.execute(() -> {
+            List<Integer> termIds = mRepository.getTermIds();
+            Log.i("CourseEditorViewModel", "TermId array size = " + termIds.size());
+            mTermIds.postValue(termIds);
+            Log.i("CourseEditorViewModel", "mTermIds posted " + termIds.toString() + " just fine");
+        });
+    }
     public void fetchSpinnerItems() {
         executor.execute(() ->{
             List<String> strings = mRepository.getTermTitles();
             termList.postValue(strings);
+            Log.i("CourseEditorViewModel", "termList posted " + strings.toString() + " just fine");
         });
     }
 
@@ -96,13 +104,40 @@ public void loadTerms() {
         int position = 0;
         for(int id : mTermIds.getValue()){
             if(id == termId){
+                Log.i("CourseEditorViewModel", "Found " + termId + " at position " + position);
                 return position;
             }
             else{
+                Log.i("CourseEditorViewModel", "Didn't find " + termId + " at position " + position
+                        + "\nFound " + id + " instead");
                 position++;
             }
 
         }
         return position;
+    }
+    public void confirmDelete(Context mContext, CourseEntity course) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setCancelable(true);
+        builder.setTitle("Please Confirm");
+        builder.setMessage("Do you really want to delete this Course?");
+        builder.setPositiveButton("Confirm",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(mContext, CoursesActivity.class);
+                        mContext.startActivity(intent);
+                        deleteCourse(course);
+                    }
+                });
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

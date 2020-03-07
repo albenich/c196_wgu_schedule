@@ -1,12 +1,18 @@
 package com.logiconets.c196_nick_albers.viewmodel;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.logiconets.c196_nick_albers.CoursesActivity;
+import com.logiconets.c196_nick_albers.TermsActivity;
 import com.logiconets.c196_nick_albers.database.AppRepository;
 import com.logiconets.c196_nick_albers.database.CourseEntity;
 import com.logiconets.c196_nick_albers.database.TermEntity;
@@ -58,5 +64,30 @@ public class TermEditorViewModel extends AndroidViewModel {
 
     public void deleteTerm(TermEntity term){
         executor.execute(() -> mRepository.deleteTerm(term));
+    }
+
+    public void confirmDelete(Context mContext, TermEntity term) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setCancelable(true);
+        builder.setTitle("Please Confirm");
+        builder.setMessage("Do you really want to delete this Term?");
+        builder.setPositiveButton("Confirm",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(mContext, TermsActivity.class);
+                        mContext.startActivity(intent);
+                        deleteTerm(term);
+                    }
+                });
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
