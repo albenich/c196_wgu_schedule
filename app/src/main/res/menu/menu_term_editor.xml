@@ -4,6 +4,11 @@
     tools:context="com.logiconets.c196_nick_albers.TermEditorActivity">
 
     <item
+        android:id="@+id/action_delete_term"
+        android:title="Delete Term"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_courses"
         android:title="View Courses"
         app:showAsAction="never" />

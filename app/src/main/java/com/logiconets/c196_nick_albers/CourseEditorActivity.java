@@ -105,10 +105,6 @@ public class CourseEditorActivity extends AppCompatActivity {
 
     public void populateTermSpinner(){
         mTermCombo = (Spinner) findViewById(R.id.term_spinner);
-        /*List<String> list = new ArrayList<String>();
-        list.add("list 1");
-        list.add("list 2");
-        list.add("list 3");*/
 
         mViewModel.termList.observe(this, spinnerData -> {
             Log.i("Spinner", "termList is this big " + spinnerData.size());
@@ -116,6 +112,7 @@ public class CourseEditorActivity extends AppCompatActivity {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
             mTermCombo.setAdapter(adapter);
+            mTermCombo.setSelection(mTermId);
         });
 
     }
@@ -190,6 +187,10 @@ public class CourseEditorActivity extends AppCompatActivity {
                 addIntent.putExtra(COURSE_ID_KEY,mViewModel.mLiveCourse.getValue().getCourseId());
                 Log.i("CourseEditor", "CourseId = " + mViewModel.mLiveCourse.getValue().getCourseId());
                 startActivity(addIntent);
+                return true;
+            case R.id.action_delete_course:
+                finish();
+                mViewModel.deleteCourse(mViewModel.mLiveCourse.getValue());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

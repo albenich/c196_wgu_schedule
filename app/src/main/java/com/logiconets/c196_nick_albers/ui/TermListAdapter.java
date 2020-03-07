@@ -3,6 +3,7 @@ package com.logiconets.c196_nick_albers.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.logiconets.c196_nick_albers.utility.Constants.TERM_ID_KEY;
 

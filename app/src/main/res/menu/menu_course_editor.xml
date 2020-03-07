@@ -4,6 +4,11 @@
     tools:context="com.logiconets.c196_nick_albers.CourseEditorActivity">
 
     <item
+        android:id="@+id/action_delete_course"
+        android:title="Delete Course"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_assessments"
         android:title="View Assessments"
         app:showAsAction="never" />

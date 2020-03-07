@@ -68,6 +68,10 @@ public class AppRepository {
         return mDb.termDAO().getTermTitles();
     }
 
+    public void deleteTerm(TermEntity term){
+        mDb.termDAO().deleteTerm(term);
+    }
+
     public TermEntity getTermById(int termId) {
         return mDb.termDAO().getTermById(termId);
     }
@@ -85,6 +89,10 @@ public class AppRepository {
 
     public void insertCourse(final CourseEntity course) {
         executor.execute(() -> mDb.courseDAO().insert(course));
+    }
+
+    public void deleteCourse(final CourseEntity course) {
+        executor.execute(() -> mDb.courseDAO().deleteCourse(course));
     }
 
 //Modules for AssessmentEntity Querying

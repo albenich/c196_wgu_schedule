@@ -28,13 +28,13 @@ public class AssessmentActivity extends AppCompatActivity {
 
     @BindView(R.id.assessmentRecyclerView)
     RecyclerView mRecyclerView;
-
+/*
     @OnClick(R.id.newAssessmentFab)
     void fabClickHandler(){
         Intent intent = new Intent(this, AssessmentEditorActivity.class);
         startActivity(intent);
     }
-
+*/
     private List<AssessmentEntity> assessmentData = new ArrayList<>();
     private AssessmentListAdapter mAdapter;
     private AssessmentViewModel mViewModel;

@@ -55,4 +55,8 @@ public class TermEditorViewModel extends AndroidViewModel {
         }
         mRepository.insertTerm(term.getTerm());
     }
+
+    public void deleteTerm(TermEntity term){
+        executor.execute(() -> mRepository.deleteTerm(term));
+    }
 }

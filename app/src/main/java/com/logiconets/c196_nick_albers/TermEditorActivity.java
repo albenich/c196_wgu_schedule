@@ -82,7 +82,7 @@ public class TermEditorActivity extends AppCompatActivity {
             mTitle.setText(termEntity.getTerm().getTitle());
             mStartDate.setText(sdf.format(termEntity.getTerm().getStartDate()));
             mEndDate.setText(sdf.format(termEntity.getTerm().getEndDate()));
-            Toast.makeText(this, termEntity.getCourses().toString(),Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, termEntity.getCourses().toString(),Toast.LENGTH_LONG).show();
             });
 
         Bundle extras = getIntent().getExtras();
@@ -113,6 +113,16 @@ public class TermEditorActivity extends AppCompatActivity {
                 addIntent.putExtra(TERM_ID_KEY,mViewModel.mLiveTerm.getValue().getTerm().getTitleId());
                 Log.i("TermEditor", "TermId = " + mViewModel.mLiveTerm.getValue().getTerm().getTitleId());
                 startActivity(addIntent);
+            case R.id.action_delete_term:
+                if(mViewModel.mLiveTerm.getValue().getCourses().size() > 0){
+                    Toast.makeText(this,"Unable to delete a Term with Courses added",Toast.LENGTH_LONG).show();
+                }
+                else{
+                    finish();
+                    Log.i("TermEditor", mViewModel.mLiveTerm.getValue().getTerm().getTitle() + " is Deleted");
+                    mViewModel.deleteTerm(mViewModel.mLiveTerm.getValue().getTerm());
+                }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

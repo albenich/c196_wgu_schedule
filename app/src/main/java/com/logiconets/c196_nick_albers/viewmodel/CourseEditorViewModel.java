@@ -80,4 +80,8 @@ public class CourseEditorViewModel extends AndroidViewModel {
         }
         mRepository.insertCourse(course);
     }
+
+    public void deleteCourse(CourseEntity course){
+        mRepository.deleteCourse(course);
+    }
 }

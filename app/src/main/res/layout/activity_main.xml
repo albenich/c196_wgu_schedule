@@ -51,16 +51,6 @@
             android:textSize="@dimen/list_text_size"
             android:onClick="onClickDisplayCourses"/>
 
-        <Button
-            android:id="@+id/assessmentBtn"
-            android:layout_width="200dp"
-            android:layout_height="75dp"
-            android:text="Assessments"
-            android:textSize="20sp"
-            android:onClick="onClickDisplayAssessments"
-            />
-
-
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
