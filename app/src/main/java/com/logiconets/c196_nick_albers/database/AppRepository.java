@@ -64,6 +64,8 @@ public class AppRepository {
 
     }
 
+    public List<Integer> getTermIds() { return mDb.termDAO().getTermIds(); }
+
     public List<String> getTermTitles(){
         return mDb.termDAO().getTermTitles();
     }

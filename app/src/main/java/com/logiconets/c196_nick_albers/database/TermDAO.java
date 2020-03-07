@@ -40,4 +40,7 @@ public interface TermDAO {
 
     @Query("SELECT title FROM term;")
     List<String> getTermTitles();
+
+    @Query("SELECT id FROM term;")
+    List<Integer> getTermIds();
 }

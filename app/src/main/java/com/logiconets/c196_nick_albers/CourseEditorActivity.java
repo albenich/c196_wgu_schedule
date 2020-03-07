@@ -154,7 +154,9 @@ public class CourseEditorActivity extends AppCompatActivity {
             mCmEmail.setText(courseEntity.getCmEmail());
             mCmPhone.setText(courseEntity.getCmPhone());
             mNotes.setText(courseEntity.getNotes());
-            mTermId = courseEntity.getTermId(); //fix later
+            mTermId = courseEntity.getTermId();
+            mTermCombo.setSelection(mViewModel.getTermIdPosition(mTermId));
+
         });
 
     }
@@ -203,15 +205,13 @@ public class CourseEditorActivity extends AppCompatActivity {
     }
 
     private void saveAndReturn(){
-        try {
-            mViewModel.saveCourse(mTitle.getText().toString(),sdf.parse(mStartDate.getText().toString()),
-                    sdf.parse(mEndDate.getText().toString()),mStatus.getText().toString(),mCmName.getText().toString(),
-                    mCmEmail.getText().toString(),mCmPhone.getText().toString(),mNotes.getText().toString(),mTermId); //fix later
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        mTermId = mViewModel.mTermIds.getValue().get(mTermCombo.getSelectedItemPosition());
+        Log.i("CourseEditor", "Selected TermId = " + mTermId);
+        mViewModel.saveCourse(mTitle.getText().toString(),convertStrToDate(mStartDate.getText().toString()),
+                convertStrToDate(mEndDate.getText().toString()),mStatus.getText().toString(),mCmName.getText().toString(),
+                mCmEmail.getText().toString(),mCmPhone.getText().toString(),mNotes.getText().toString(),mTermId);
         finish();
-    }
+}
 
     @OnClick(R.id.course_start_alarmSwitch)
     public void onClickStartAlarm(){
@@ -232,8 +232,8 @@ public class CourseEditorActivity extends AppCompatActivity {
         }
         else{
             alarmController.cancelAlarm();
-        }
-    }
+    }}
+
 
     @OnClick(R.id.course_startDate)
     public void onClickStartDate() {

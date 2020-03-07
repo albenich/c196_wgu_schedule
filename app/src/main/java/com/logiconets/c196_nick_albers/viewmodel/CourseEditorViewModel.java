@@ -21,16 +21,18 @@ import java.util.concurrent.Executors;
 public class CourseEditorViewModel extends AndroidViewModel {
 
     public MutableLiveData<CourseEntity> mLiveCourse = new MutableLiveData<>();
-    public LiveData<List<TermEntity>> mLiveTerms;;
+    //public MutableLiveData<List<TermEntity>> mLiveTerms = new MutableLiveData<>();
 
     private AppRepository mRepository;
     private Executor executor = Executors.newSingleThreadExecutor();
     public MutableLiveData<List<String>> termList = new MutableLiveData<>();
+    public MutableLiveData<List<Integer>> mTermIds = new MutableLiveData<>();
 
     public CourseEditorViewModel(@NonNull Application application){
         super(application);
         mRepository = AppRepository.getInstance(application.getApplicationContext());
         fetchSpinnerItems();
+        loadTerms();
     }
 /*
     public MutableLiveData<List<String>> fetchSpinnerItems() {
@@ -42,7 +44,12 @@ public class CourseEditorViewModel extends AndroidViewModel {
 
     }
 */
-
+public void loadTerms() {
+    executor.execute(() -> {
+        List<Integer> termIds = mRepository.getTermIds();
+        mTermIds.postValue(termIds);
+    });
+}
     public void fetchSpinnerItems() {
         executor.execute(() ->{
             List<String> strings = mRepository.getTermTitles();
@@ -83,5 +90,19 @@ public class CourseEditorViewModel extends AndroidViewModel {
 
     public void deleteCourse(CourseEntity course){
         mRepository.deleteCourse(course);
+    }
+
+    public int getTermIdPosition(int termId){
+        int position = 0;
+        for(int id : mTermIds.getValue()){
+            if(id == termId){
+                return position;
+            }
+            else{
+                position++;
+            }
+
+        }
+        return position;
     }
 }
