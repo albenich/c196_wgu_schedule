@@ -151,6 +151,7 @@ public class CourseEditorActivity extends AppCompatActivity {
             setTitle("Edit Course");
             int courseId = extras.getInt(COURSE_ID_KEY);
             mViewModel.loadData(courseId);
+            isNew = false;
         }
         if(!mViewModel.isPopulated) {
             mViewModel.mLiveCourse.observe(this, courseEntity -> {

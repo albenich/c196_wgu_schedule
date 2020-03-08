@@ -96,6 +96,7 @@ public class TermEditorActivity extends AppCompatActivity {
             setTitle(R.string.edit_term);
             int termId = extras.getInt(TERM_ID_KEY);
             mViewModel.loadData(termId);
+            isNew = false;
         }
     }
 
@@ -119,6 +120,7 @@ public class TermEditorActivity extends AppCompatActivity {
                 return true;
             case R.id.action_delete_term:
                 if(!isNew) {
+                    Log.i("TermEditor","mLiveTerm has " + mViewModel.mLiveTerm.getValue().getCourses().size() + " courses" );
                     if (mViewModel.mLiveTerm.getValue().getCourses().size() > 0) {
                         Toast.makeText(this, "Unable to delete a Term with Courses added", Toast.LENGTH_LONG).show();
                     } else {

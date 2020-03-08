@@ -104,6 +104,7 @@ public class AssessmentEditorActivity extends AppCompatActivity {
             setTitle("Edit Assessment");
             int assessmentId = extras.getInt(ASSESSMENT_ID_KEY);
             mViewModel.loadData(assessmentId);
+            isNew = false;
         }
         if(!mViewModel.isPopulated) {
             mViewModel.mLiveAssessment.observe(this, assessmentEntity -> {
