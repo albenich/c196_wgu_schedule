@@ -26,6 +26,7 @@ import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -112,7 +113,6 @@ public class CourseEditorActivity extends AppCompatActivity {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
             mTermCombo.setAdapter(adapter);
-            //mTermCombo.setSelection(mTermId);
         });
 
     }
@@ -197,18 +197,19 @@ public class CourseEditorActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
+/*  Prefer to leave back button standard to allow a way to abort changes
     @Override
     public void onBackPressed(){
         saveAndReturn();
     }
-
+*/
     private void saveAndReturn(){
         mTermId = mViewModel.mTermIds.getValue().get(mTermCombo.getSelectedItemPosition());
         Log.i("CourseEditor", "Selected TermId = " + mTermId);
         mViewModel.saveCourse(mTitle.getText().toString(),convertStrToDate(mStartDate.getText().toString()),
                 convertStrToDate(mEndDate.getText().toString()),mStatus.getText().toString(),mCmName.getText().toString(),
                 mCmEmail.getText().toString(),mCmPhone.getText().toString(),mNotes.getText().toString(),mTermId);
+        Toast.makeText(this,"Course Saved",Toast.LENGTH_SHORT);
         finish();
 }
 

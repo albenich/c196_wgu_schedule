@@ -126,15 +126,16 @@ public class TermEditorActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
+/*  Prefer to leave back button standard to allow a way to abort changes
     @Override
     public void onBackPressed() {
         saveAndReturn();
     }
-
+*/
     private void saveAndReturn() {
         mViewModel.saveTerm(mTitle.getText().toString(),convertStrToDate(mStartDate.getText().toString()),
         convertStrToDate(mEndDate.getText().toString()));
+        Toast.makeText(this,"Term Saved",Toast.LENGTH_SHORT);
         finish();
     }
 

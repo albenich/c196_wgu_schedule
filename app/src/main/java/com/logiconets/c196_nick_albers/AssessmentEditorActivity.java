@@ -23,6 +23,7 @@ import android.widget.DatePicker;
 import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -135,16 +136,17 @@ public class AssessmentEditorActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
+/*  Prefer to leave back button standard to allow a way to abort changes
     @Override
     public void onBackPressed(){
         saveAndReturn();
     }
-
+*/
     private void saveAndReturn(){
         String typeString = mType.getCheckedRadioButtonId() == R.id.performanceRadio ? "Performance" : "Objective";
         mViewModel.saveAssessment(mTitle.getText().toString(),typeString,
                    convertStrToDate(mDueDate.getText().toString()),mCourseId);
+        Toast.makeText(this,"Assessment Saved",Toast.LENGTH_SHORT);
         finish();
     }
     @OnClick(R.id.assessment_alarmSwitch)
