@@ -88,6 +88,8 @@ public class CourseEditorActivity extends AppCompatActivity {
     private CourseEditorViewModel mViewModel;
 
     AlarmController alarmController;
+    private int startAlarmNotificationId;
+    private int endAlarmNotificationId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,6 +167,8 @@ public class CourseEditorActivity extends AppCompatActivity {
                 mNotes.setText(courseEntity.getNotes());
                 mTermId = courseEntity.getTermId();
                 mTermCombo.setSelection(mViewModel.getTermIdPosition(mTermId));
+                startAlarmNotificationId = courseEntity.getTermId() * 1000 + courseEntity.getCourseId() *10;
+                endAlarmNotificationId = courseEntity.getTermId() * 1000 + courseEntity.getCourseId() *10 + 1;
             });
         }mViewModel.isPopulated = true;
     }
@@ -229,10 +233,32 @@ public class CourseEditorActivity extends AppCompatActivity {
                     convertStrToDate(mEndDate.getText().toString()), mStatusCombo.getSelectedItem().toString(), mCmName.getText().toString(),
                     mCmEmail.getText().toString(), mCmPhone.getText().toString(), mNotes.getText().toString(), mTermId);
             Toast.makeText(this, "Course Saved", Toast.LENGTH_SHORT);
+            setAlarms();
             finish();
         }
 }
 
+    private void setAlarms() {
+        Log.i("CourseEditor","StartAlarmNotification " + startAlarmNotificationId);
+        if (mStartAlarm.isChecked()) {
+            alarmController = new AlarmController("Start of " + mTitle.getText()
+                    , convertStrToDate(mStartDate.getText().toString()), startAlarmNotificationId, this);
+            alarmController.setAlarm();
+        } else {
+            alarmController.cancelAlarm();
+        }
+        Log.i("CourseEditor","EndAlarmNotification " + endAlarmNotificationId);
+
+        if(mEndAlarm.isChecked()){
+            alarmController = new AlarmController("End of " + mTitle.getText()
+                    , convertStrToDate(mEndDate.getText().toString()), endAlarmNotificationId, this);
+            alarmController.setAlarm();
+        }
+        else{
+            alarmController.cancelAlarm();
+        }
+    }
+/*
     @OnClick(R.id.course_start_alarmSwitch)
     public void onClickStartAlarm(){
         if(mStartAlarm.isChecked()){
@@ -253,7 +279,7 @@ public class CourseEditorActivity extends AppCompatActivity {
         else{
             alarmController.cancelAlarm();
     }}
-
+*/
 
     @OnClick(R.id.course_startDate)
     public void onClickStartDate() {

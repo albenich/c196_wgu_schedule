@@ -31,12 +31,12 @@ public class AlarmController {
     private Context context;
     private int notificationId;
 
-    public AlarmController(String alarmTitle, Date alarmDate, Context context) {
+    public AlarmController(String alarmTitle, Date alarmDate, int notificationId, Context context) {
         this.isArmed = false;
         this.alarmTitle = alarmTitle;
         this.alarmDate = alarmDate;
         this.context = context;
-        notificationId = new Random().nextInt(10000);
+        this.notificationId = notificationId;
 
         mNotificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
 
@@ -61,6 +61,21 @@ public class AlarmController {
         this.notifyPendingIntent = notifyPendingIntent;
     }
 
+    public Intent getIntent() {
+        return intent;
+    }
+
+    public void setIntent(Intent intent) {
+        this.intent = intent;
+    }
+
+    public int getNotificationId() {
+        return notificationId;
+    }
+
+    public void setNotificationId(int notificationId) {
+        this.notificationId = notificationId;
+    }
     public Boolean getArmed() {
         return isArmed;
     }

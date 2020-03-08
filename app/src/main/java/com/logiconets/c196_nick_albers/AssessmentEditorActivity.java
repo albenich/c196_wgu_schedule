@@ -59,7 +59,8 @@ public class AssessmentEditorActivity extends AppCompatActivity {
     Switch mAlarmSwitch;
 
     private boolean isNew;
-    int mCourseId;
+    private int mCourseId;
+    private int notificationId;
 
     AssessmentEditorViewModel mViewModel;
     final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
@@ -117,6 +118,7 @@ public class AssessmentEditorActivity extends AppCompatActivity {
                 mDueDate.setText(sdf.format(assessmentEntity.getDueDate()));
                 // mCourseId.setText(String.valueOf(assessmentEntity.getCourseId()));
                 mCourseId = assessmentEntity.getCourseId();
+                notificationId = mCourseId + 20000 + mViewModel.mLiveAssessment.getValue().getAssessmentId();
             });
         }mViewModel.isPopulated = true;
 
@@ -178,7 +180,7 @@ public class AssessmentEditorActivity extends AppCompatActivity {
     public void onClickAlarmSwitch(){
         if(mAlarmSwitch.isChecked()){
             alarmController = new AlarmController("Assessment: " + mTitle.getText().toString(),
-                    convertStrToDate(mDueDate.getText().toString()),this);
+                    convertStrToDate(mDueDate.getText().toString()),notificationId,this);
             alarmController.setAlarm();
         }
         else{
