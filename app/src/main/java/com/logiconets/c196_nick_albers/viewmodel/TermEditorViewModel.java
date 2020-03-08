@@ -27,6 +27,8 @@ import java.util.concurrent.Executors;
 public class TermEditorViewModel extends AndroidViewModel {
 
     public MutableLiveData<TermsAndCourses> mLiveTerm = new MutableLiveData<>();
+    public boolean isPopulated;
+
     private AppRepository mRepository;
     private Executor executor = Executors.newSingleThreadExecutor();
 

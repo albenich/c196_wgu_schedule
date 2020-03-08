@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
@@ -57,6 +58,7 @@ public class AssessmentEditorActivity extends AppCompatActivity {
     @BindView(R.id.assessment_alarmSwitch)
     Switch mAlarmSwitch;
 
+    private boolean isNew;
     int mCourseId;
 
     AssessmentEditorViewModel mViewModel;
@@ -90,30 +92,32 @@ public class AssessmentEditorActivity extends AppCompatActivity {
 
         if(extras == null) {
             setTitle("New Assessment");
+            isNew = true;
         }
         else if(courseId != -1){
             setTitle("New Assessment");
             Log.i("CourseEditor", "CourseId = " + courseId);
             mCourseId = courseId;
+            isNew = true;
         }
         else{
             setTitle("Edit Assessment");
             int assessmentId = extras.getInt(ASSESSMENT_ID_KEY);
             mViewModel.loadData(assessmentId);
         }
-
-        mViewModel.mLiveAssessment.observe(this, assessmentEntity -> {
-            mTitle.setText(assessmentEntity.getTitle());
-            if(assessmentEntity.getAssessType().equals("Performance")) {
-                mType.check(R.id.performanceRadio);
-            } else{
-                mType.check(R.id.objectiveRadio);
-            }
-            mDueDate.setText(sdf.format(assessmentEntity.getDueDate()));
-           // mCourseId.setText(String.valueOf(assessmentEntity.getCourseId()));
-            mCourseId = assessmentEntity.getCourseId();
-        });
-
+        if(!mViewModel.isPopulated) {
+            mViewModel.mLiveAssessment.observe(this, assessmentEntity -> {
+                mTitle.setText(assessmentEntity.getTitle());
+                if (assessmentEntity.getAssessType().equals("Performance")) {
+                    mType.check(R.id.performanceRadio);
+                } else {
+                    mType.check(R.id.objectiveRadio);
+                }
+                mDueDate.setText(sdf.format(assessmentEntity.getDueDate()));
+                // mCourseId.setText(String.valueOf(assessmentEntity.getCourseId()));
+                mCourseId = assessmentEntity.getCourseId();
+            });
+        }mViewModel.isPopulated = true;
 
     }
 
@@ -129,12 +133,27 @@ public class AssessmentEditorActivity extends AppCompatActivity {
     };
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_assessment_editor, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        if(item.getItemId() == android.R.id.home){
-            saveAndReturn();
-            return true;
+        switch(item.getItemId()){
+            case android.R.id.home:
+                saveAndReturn();
+                return true;
+            case R.id.action_delete_assessment:
+                if(!isNew) {
+                    mViewModel.confirmDelete(this, mViewModel.mLiveAssessment.getValue(), this);
+                }else{
+                    Toast.makeText(this,"Delete not available for new items", Toast.LENGTH_LONG).show();
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 /*  Prefer to leave back button standard to allow a way to abort changes
     @Override
@@ -144,10 +163,15 @@ public class AssessmentEditorActivity extends AppCompatActivity {
 */
     private void saveAndReturn(){
         String typeString = mType.getCheckedRadioButtonId() == R.id.performanceRadio ? "Performance" : "Objective";
-        mViewModel.saveAssessment(mTitle.getText().toString(),typeString,
-                   convertStrToDate(mDueDate.getText().toString()),mCourseId);
-        Toast.makeText(this,"Assessment Saved",Toast.LENGTH_SHORT);
-        finish();
+        if(mTitle.getText().toString().equals("") || mDueDate.getText().toString().equals("")){
+            Toast.makeText(this, "Fill out all fields.", Toast.LENGTH_LONG).show();
+        }
+        else {
+            mViewModel.saveAssessment(mTitle.getText().toString(), typeString,
+                    convertStrToDate(mDueDate.getText().toString()), mCourseId);
+            Toast.makeText(this, "Assessment Saved", Toast.LENGTH_SHORT);
+            finish();
+        }
     }
     @OnClick(R.id.assessment_alarmSwitch)
     public void onClickAlarmSwitch(){

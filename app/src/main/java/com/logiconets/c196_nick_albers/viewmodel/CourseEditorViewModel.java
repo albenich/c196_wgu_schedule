@@ -1,5 +1,6 @@
 package com.logiconets.c196_nick_albers.viewmodel;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -27,11 +28,13 @@ public class CourseEditorViewModel extends AndroidViewModel {
 
     public MutableLiveData<CourseEntity> mLiveCourse = new MutableLiveData<>();
     //public MutableLiveData<List<TermEntity>> mLiveTerms = new MutableLiveData<>();
+    public MutableLiveData<List<String>> termList = new MutableLiveData<>();
+    public MutableLiveData<List<Integer>> mTermIds = new MutableLiveData<>();
+    public boolean isPopulated;
 
     private AppRepository mRepository;
     private Executor executor = Executors.newSingleThreadExecutor();
-    public MutableLiveData<List<String>> termList = new MutableLiveData<>();
-    public MutableLiveData<List<Integer>> mTermIds = new MutableLiveData<>();
+
 
     public CourseEditorViewModel(@NonNull Application application){
         super(application);
@@ -116,7 +119,7 @@ public class CourseEditorViewModel extends AndroidViewModel {
         }
         return position;
     }
-    public void confirmDelete(Context mContext, CourseEntity course) {
+    public void confirmDelete(Context mContext, CourseEntity course, Activity activity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setCancelable(true);
         builder.setTitle("Please Confirm");
@@ -125,8 +128,9 @@ public class CourseEditorViewModel extends AndroidViewModel {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(mContext, CoursesActivity.class);
-                        mContext.startActivity(intent);
+                     //   Intent intent = new Intent(mContext, CoursesActivity.class);
+                     //   mContext.startActivity(intent);
+                        activity.onBackPressed();
                         deleteCourse(course);
                     }
                 });

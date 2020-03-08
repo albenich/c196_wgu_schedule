@@ -51,6 +51,7 @@ public class TermEditorActivity extends AppCompatActivity {
     final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
     TextView mSelected;
+    private boolean isNew;
 
     private TermEditorViewModel mViewModel;
 
@@ -78,16 +79,18 @@ public class TermEditorActivity extends AppCompatActivity {
     private void initViewModel(){
         mViewModel = new ViewModelProvider(this).get(TermEditorViewModel.class);
 
-        mViewModel.mLiveTerm.observe(this, termEntity ->{
-            mTitle.setText(termEntity.getTerm().getTitle());
-            mStartDate.setText(sdf.format(termEntity.getTerm().getStartDate()));
-            mEndDate.setText(sdf.format(termEntity.getTerm().getEndDate()));
-            //Toast.makeText(this, termEntity.getCourses().toString(),Toast.LENGTH_LONG).show();
+        if(!mViewModel.isPopulated) {
+            mViewModel.mLiveTerm.observe(this, termEntity -> {
+                mTitle.setText(termEntity.getTerm().getTitle());
+                mStartDate.setText(sdf.format(termEntity.getTerm().getStartDate()));
+                mEndDate.setText(sdf.format(termEntity.getTerm().getEndDate()));
+                //Toast.makeText(this, termEntity.getCourses().toString(),Toast.LENGTH_LONG).show();
             });
-
+        }mViewModel.isPopulated = true;
         Bundle extras = getIntent().getExtras();
         if(extras == null) {
             setTitle(R.string.new_term);
+            isNew = true;
         }
         else{
             setTitle(R.string.edit_term);
@@ -115,11 +118,15 @@ public class TermEditorActivity extends AppCompatActivity {
                 startActivity(addIntent);
                 return true;
             case R.id.action_delete_term:
-                if(mViewModel.mLiveTerm.getValue().getCourses().size() > 0){
-                    Toast.makeText(this,"Unable to delete a Term with Courses added",Toast.LENGTH_LONG).show();
+                if(!isNew) {
+                    if (mViewModel.mLiveTerm.getValue().getCourses().size() > 0) {
+                        Toast.makeText(this, "Unable to delete a Term with Courses added", Toast.LENGTH_LONG).show();
+                    } else {
+                        mViewModel.confirmDelete(this, mViewModel.mLiveTerm.getValue().getTerm());
+                    }
                 }
                 else{
-                    mViewModel.confirmDelete(this, mViewModel.mLiveTerm.getValue().getTerm());
+                    Toast.makeText(this,"Delete not available for new items", Toast.LENGTH_LONG).show();
                 }
                 return true;
             default:
@@ -133,10 +140,18 @@ public class TermEditorActivity extends AppCompatActivity {
     }
 */
     private void saveAndReturn() {
-        mViewModel.saveTerm(mTitle.getText().toString(),convertStrToDate(mStartDate.getText().toString()),
-        convertStrToDate(mEndDate.getText().toString()));
-        Toast.makeText(this,"Term Saved",Toast.LENGTH_SHORT);
-        finish();
+        if(mTitle.getText().toString().equals("") || mStartDate.getText().toString().equals("") || mEndDate.getText().toString().equals("") ){
+            Toast.makeText(this, "Fill out all fields.", Toast.LENGTH_LONG).show();
+        }
+        else if(convertStrToDate(mEndDate.getText().toString()).before(convertStrToDate(mStartDate.getText().toString()))){
+            Toast.makeText(this,"Term cannot start after it ends",Toast.LENGTH_LONG).show();
+        }
+        else {
+            mViewModel.saveTerm(mTitle.getText().toString(), convertStrToDate(mStartDate.getText().toString()),
+                    convertStrToDate(mEndDate.getText().toString()));
+            Toast.makeText(this, "Term Saved", Toast.LENGTH_SHORT);
+            finish();
+        }
     }
 
     DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {

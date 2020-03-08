@@ -108,6 +108,10 @@ public class AppRepository {
         executor.execute(() -> mDb.assessmentDAO().insert(assessment));
     }
 
+    public void deleteAssessment(AssessmentEntity assessment){
+        executor.execute(() -> mDb.assessmentDAO().deleteAssessment(assessment));
+    }
+
 //Modules for TermsAndCourses
     private LiveData<List<TermsAndCourses>> getAllTermsAndCourses() { return mDb.termDAO().loadTermsAndCourses(); }
 

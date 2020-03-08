@@ -14,18 +14,18 @@
             android:label="@string/title_activity_assessment_editor"
             android:parentActivityName=".AssessmentActivity"
             android:theme="@style/AppTheme.NoActionBar">
-            <!--   <meta-data
+               <meta-data
                    android:name="android.support.PARENT_ACTIVITY"
-                   android:value="com.logiconets.c196_nick_albers.AssessmentActivity" />-->
+                   android:value="com.logiconets.c196_nick_albers.AssessmentActivity" />
         </activity>
         <activity
             android:name=".AssessmentActivity"
             android:label="@string/title_activity_assessment"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".CoursesActivity"
             android:theme="@style/AppTheme.NoActionBar">
-            <!--    <meta-data
+                <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value="com.logiconets.c196_nick_albers.MainActivity" />-->
+                    android:value="com.logiconets.c196_nick_albers.CoursesActivity" />
         </activity>
 
         <receiver
@@ -36,38 +36,38 @@
         <activity
             android:name=".CourseEditorActivity"
             android:label="@string/title_activity_course_editor"
-           android:parentActivityName=".CoursesActivity"
+            android:parentActivityName=".CoursesActivity"
             android:theme="@style/AppTheme.NoActionBar">
-        <!--    <meta-data
+            <meta-data
                android:name="android.support.PARENT_ACTIVITY"
-               android:value="com.logiconets.c196_nick_albers.CoursesActivity" />-->
+               android:value="com.logiconets.c196_nick_albers.CoursesActivity" />
         </activity>
         <activity
             android:name=".TermEditorActivity"
             android:label="@string/title_activity_editor"
             android:parentActivityName=".TermsActivity"
             android:theme="@style/AppTheme.NoActionBar">
-        <!--   <meta-data
+           <meta-data
                android:name="android.support.PARENT_ACTIVITY"
-               android:value="com.logiconets.c196_nick_albers.TermsActivity" />-->
+               android:value="com.logiconets.c196_nick_albers.TermsActivity" />
         </activity>
         <activity
             android:name=".CoursesActivity"
             android:label="@string/title_activity_courses"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
-        <!--    <meta-data
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.logiconets.c196_nick_albers.MainActivity" />-->
+                android:value="com.logiconets.c196_nick_albers.MainActivity" />
         </activity>
         <activity
             android:name=".TermsActivity"
             android:label="@string/title_activity_terms"
           android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
-        <!--     <meta-data
+             <meta-data
                android:name="android.support.PARENT_ACTIVITY"
-               android:value="com.logiconets.c196_nick_albers.MainActivity" />-->
+               android:value="com.logiconets.c196_nick_albers.MainActivity" />
         </activity>
         <activity android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">

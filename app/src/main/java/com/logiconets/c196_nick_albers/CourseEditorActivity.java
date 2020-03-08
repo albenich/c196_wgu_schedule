@@ -8,6 +8,7 @@ import com.logiconets.c196_nick_albers.database.TermEntity;
 import com.logiconets.c196_nick_albers.utility.AlarmController;
 import com.logiconets.c196_nick_albers.viewmodel.CourseEditorViewModel;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ShareCompat;
@@ -54,9 +55,6 @@ public class CourseEditorActivity extends AppCompatActivity {
     @BindView(R.id.course_endDate)
     TextView mEndDate;
 
-    @BindView(R.id.course_status)
-    TextView mStatus;
-
     @BindView(R.id.course_cmName)
     TextView mCmName;
 
@@ -76,13 +74,16 @@ public class CourseEditorActivity extends AppCompatActivity {
     Switch mEndAlarm;
 
     private Spinner mTermCombo;
+    private Spinner mStatusCombo;
     ArrayAdapter<String> adapter;
+    ArrayAdapter<CharSequence> statusAdapter;
 
     TextView mSelected;
     final Calendar calendar = Calendar.getInstance();
     final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
     int mTermId;
+    private boolean isNew;
 
     private CourseEditorViewModel mViewModel;
 
@@ -104,8 +105,12 @@ public class CourseEditorActivity extends AppCompatActivity {
 
     }
 
-    public void populateTermSpinner(){
+    public void populateSpinners(){
         mTermCombo = (Spinner) findViewById(R.id.term_spinner);
+        mStatusCombo = (Spinner) findViewById(R.id.status_spinner);
+        statusAdapter = ArrayAdapter.createFromResource(this,
+                R.array.course_status_array, android.R.layout.simple_spinner_item);
+        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         mViewModel.termList.observe(this, spinnerData -> {
             Log.i("Spinner", "Spinner Array is this big " + spinnerData.size());
@@ -113,6 +118,7 @@ public class CourseEditorActivity extends AppCompatActivity {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
             mTermCombo.setAdapter(adapter);
+            mStatusCombo.setAdapter(statusAdapter);
         });
 
     }
@@ -125,7 +131,7 @@ public class CourseEditorActivity extends AppCompatActivity {
 
     private void initViewModel() {
         mViewModel = new ViewModelProvider(this).get(CourseEditorViewModel.class);
-        populateTermSpinner();
+        populateSpinners();
 
         Intent intent = getIntent();
         int termId = intent.getIntExtra(TERM_ID_KEY,-1);
@@ -133,32 +139,33 @@ public class CourseEditorActivity extends AppCompatActivity {
 
         if (extras == null) {
             setTitle("New Course");
+            isNew = true;
         }
         else if(termId != -1){
             setTitle("New Course");
             Log.i("CourseEditor", "CourseId = " + termId);
             mTermId = termId;
+            isNew = true;
         }
         else {
             setTitle("Edit Course");
             int courseId = extras.getInt(COURSE_ID_KEY);
             mViewModel.loadData(courseId);
         }
-
-        mViewModel.mLiveCourse.observe(this, courseEntity -> {
-            mTitle.setText(courseEntity.getTitle());
-            mStartDate.setText(sdf.format(courseEntity.getStartDate()));
-            mEndDate.setText(sdf.format(courseEntity.getAnticipatedEndDate()));
-            mStatus.setText(courseEntity.getStatus());
-            mCmName.setText(courseEntity.getCmName());
-            mCmEmail.setText(courseEntity.getCmEmail());
-            mCmPhone.setText(courseEntity.getCmPhone());
-            mNotes.setText(courseEntity.getNotes());
-            mTermId = courseEntity.getTermId();
-            mTermCombo.setSelection(mViewModel.getTermIdPosition(mTermId));
-
-        });
-
+        if(!mViewModel.isPopulated) {
+            mViewModel.mLiveCourse.observe(this, courseEntity -> {
+                mTitle.setText(courseEntity.getTitle());
+                mStartDate.setText(sdf.format(courseEntity.getStartDate()));
+                mEndDate.setText(sdf.format(courseEntity.getAnticipatedEndDate()));
+                mStatusCombo.setSelection(statusAdapter.getPosition(courseEntity.getStatus()));
+                mCmName.setText(courseEntity.getCmName());
+                mCmEmail.setText(courseEntity.getCmEmail());
+                mCmPhone.setText(courseEntity.getCmPhone());
+                mNotes.setText(courseEntity.getNotes());
+                mTermId = courseEntity.getTermId();
+                mTermCombo.setSelection(mViewModel.getTermIdPosition(mTermId));
+            });
+        }mViewModel.isPopulated = true;
     }
 
     DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -191,7 +198,11 @@ public class CourseEditorActivity extends AppCompatActivity {
                 startActivity(addIntent);
                 return true;
             case R.id.action_delete_course:
-                mViewModel.confirmDelete(this,mViewModel.mLiveCourse.getValue());
+                if(!isNew){
+                    mViewModel.confirmDelete(this,mViewModel.mLiveCourse.getValue(),this);
+                }else{
+                   Toast.makeText(this,"Delete not available for new items", Toast.LENGTH_LONG).show();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -204,13 +215,21 @@ public class CourseEditorActivity extends AppCompatActivity {
     }
 */
     private void saveAndReturn(){
-        mTermId = mViewModel.mTermIds.getValue().get(mTermCombo.getSelectedItemPosition());
-        Log.i("CourseEditor", "Selected TermId = " + mTermId);
-        mViewModel.saveCourse(mTitle.getText().toString(),convertStrToDate(mStartDate.getText().toString()),
-                convertStrToDate(mEndDate.getText().toString()),mStatus.getText().toString(),mCmName.getText().toString(),
-                mCmEmail.getText().toString(),mCmPhone.getText().toString(),mNotes.getText().toString(),mTermId);
-        Toast.makeText(this,"Course Saved",Toast.LENGTH_SHORT);
-        finish();
+        if(mTitle.getText().toString().equals("") || mStartDate.getText().toString().equals("") || mEndDate.getText().toString().equals("") ){
+            Toast.makeText(this, "Fill out Title, Start, and End Date at a minimum.", Toast.LENGTH_LONG).show();
+        }
+        else if(convertStrToDate(mEndDate.getText().toString()).before(convertStrToDate(mStartDate.getText().toString()))){
+            Toast.makeText(this,"Course cannot start after it ends",Toast.LENGTH_LONG).show();
+        }
+        else {
+            mTermId = mViewModel.mTermIds.getValue().get(mTermCombo.getSelectedItemPosition());
+            Log.i("CourseEditor", "Selected TermId = " + mTermId);
+            mViewModel.saveCourse(mTitle.getText().toString(), convertStrToDate(mStartDate.getText().toString()),
+                    convertStrToDate(mEndDate.getText().toString()), mStatusCombo.getSelectedItem().toString(), mCmName.getText().toString(),
+                    mCmEmail.getText().toString(), mCmPhone.getText().toString(), mNotes.getText().toString(), mTermId);
+            Toast.makeText(this, "Course Saved", Toast.LENGTH_SHORT);
+            finish();
+        }
 }
 
     @OnClick(R.id.course_start_alarmSwitch)
@@ -238,8 +257,6 @@ public class CourseEditorActivity extends AppCompatActivity {
     @OnClick(R.id.course_startDate)
     public void onClickStartDate() {
         mSelected = mStartDate;
-    //If Calendar is empty this will absolutely fail
-    //Need to fix this so that new Courses can be created
         if(TextUtils.isEmpty(mStartDate.getText())) {
             calendar.setTime(new Date());
         }
