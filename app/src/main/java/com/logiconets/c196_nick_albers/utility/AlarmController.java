@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -149,7 +150,7 @@ public class AlarmController {
                 toastMessage = alarmTitle + " Notification is On!\nSet to " + alarmDate.toString();
             }
         }
-        Toast.makeText(context,toastMessage,Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context,toastMessage,Toast.LENGTH_SHORT).show();
 
     }
 
@@ -160,8 +161,15 @@ public class AlarmController {
         }
         mNotificationManager.cancelAll();
         toastMessage = alarmTitle + " Notification is Off!";
-        Toast.makeText(context,toastMessage,Toast.LENGTH_SHORT).show();
-
+        //Toast.makeText(context,toastMessage,Toast.LENGTH_SHORT).show();
     }
 
+    public boolean isArmed(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            boolean nextExists = alarmManager.getNextAlarmClock() == null ? false : true;
+            String exists = nextExists?" Is Set": " Not Set";
+            Log.i("AlarmController","Notification " + notificationId + exists);
+        }
+        return false;
+    }
 }

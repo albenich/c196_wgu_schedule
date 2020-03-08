@@ -6,6 +6,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 
 import java.util.List;
 
@@ -32,9 +33,11 @@ public interface TermDAO {
     @Query("SELECT COUNT(*) FROM term")
     int getCount();
 
+    @Transaction
     @Query("SELECT * FROM term")
     LiveData<List<TermsAndCourses>> loadTermsAndCourses();
 
+    @Transaction
     @Query("SELECT * from term WHERE term.id = :id")
     TermsAndCourses getTermAndCoursesById(int id);
 

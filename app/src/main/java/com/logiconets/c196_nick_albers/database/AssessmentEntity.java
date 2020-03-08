@@ -26,25 +26,30 @@ public class AssessmentEntity {
     @ColumnInfo(name = "dueDate")
     private Date dueDate;
 
+    @ColumnInfo(name = "hasAlarm")
+    private Boolean hasAlarm;
+
     @ForeignKey(entity = CourseEntity.class, parentColumns = "id", childColumns = "courseId")
     @NonNull
     @ColumnInfo(name = "courseId")
     private int courseId;
 
-    public AssessmentEntity(int assessmentId, String title, String assessType, Date dueDate, int courseId) {
+    public AssessmentEntity(int assessmentId, String title, String assessType, Date dueDate, int courseId, boolean hasAlarm) {
         this.assessmentId = assessmentId;
         this.title = title;
         this.assessType = assessType;
         this.dueDate = dueDate;
         this.courseId = courseId;
+        this.hasAlarm = hasAlarm;
     }
 
     @Ignore
-    public AssessmentEntity(String title, String assessType, Date dueDate, int courseId) {
+    public AssessmentEntity(String title, String assessType, Date dueDate, int courseId, boolean hasAlarm) {
         this.title = title;
         this.assessType = assessType;
         this.dueDate = dueDate;
         this.courseId = courseId;
+        this.hasAlarm = hasAlarm;
     }
 
     public int getAssessmentId() {
@@ -87,4 +92,11 @@ public class AssessmentEntity {
         this.courseId = courseId;
     }
 
+    public Boolean getHasAlarm() {
+        return hasAlarm;
+    }
+
+    public void setHasAlarm(Boolean hasAlarm) {
+        this.hasAlarm = hasAlarm;
+    }
 }

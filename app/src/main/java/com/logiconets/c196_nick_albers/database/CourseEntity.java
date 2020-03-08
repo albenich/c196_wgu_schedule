@@ -24,8 +24,14 @@ public class CourseEntity {
     @ColumnInfo(name="startDate")
     private Date startDate;
 
+    @ColumnInfo(name="hasStartAlarm")
+    private Boolean hasStartAlarm;
+
     @ColumnInfo(name="endDate")
     private Date anticipatedEndDate;
+
+    @ColumnInfo(name="hasEndAlarm")
+    private Boolean hasEndAlarm;
 
     @ColumnInfo(name="status")
     private String status;
@@ -50,7 +56,9 @@ public class CourseEntity {
     @ColumnInfo(name = "termId")
     private int termId;
 
-    public CourseEntity(int courseId, String title, Date startDate, Date anticipatedEndDate, String status, String cmName, String cmPhone, String cmEmail, String notes,int termId) {
+    public CourseEntity(int courseId, String title, Date startDate, Date anticipatedEndDate
+            , String status, String cmName, String cmPhone, String cmEmail, String notes,int termId
+            , boolean hasStartAlarm, boolean hasEndAlarm) {
         this.courseId = courseId;
         this.title = title;
         this.startDate = startDate;
@@ -61,10 +69,14 @@ public class CourseEntity {
         this.cmEmail = cmEmail;
         this.notes = notes;
         this.termId = termId;
+        this.hasStartAlarm = hasStartAlarm;
+        this.hasEndAlarm = hasEndAlarm;
     }
 
     @Ignore
-    public CourseEntity(String title, Date startDate, Date anticipatedEndDate, String status, String cmName, String cmPhone, String cmEmail, String notes, int termId) {
+    public CourseEntity(String title, Date startDate, Date anticipatedEndDate, String status
+            , String cmName, String cmPhone, String cmEmail, String notes, int termId
+            , boolean hasStartAlarm, boolean hasEndAlarm) {
         this.title = title;
         this.startDate = startDate;
         this.anticipatedEndDate = anticipatedEndDate;
@@ -74,6 +86,8 @@ public class CourseEntity {
         this.cmEmail = cmEmail;
         this.notes = notes;
         this.termId = termId;
+        this.hasStartAlarm = hasStartAlarm;
+        this.hasEndAlarm = hasEndAlarm;
     }
     @Ignore
     public CourseEntity() {
@@ -170,5 +184,21 @@ public class CourseEntity {
 
     public void setTermId(int termId) {
         this.termId = termId;
+    }
+
+    public Boolean getHasStartAlarm() {
+        return hasStartAlarm;
+    }
+
+    public void setHasStartAlarm(Boolean hasStartAlarm) {
+        this.hasStartAlarm = hasStartAlarm;
+    }
+
+    public Boolean getHasEndAlarm() {
+        return hasEndAlarm;
+    }
+
+    public void setHasEndAlarm(Boolean hasEndAlarm) {
+        this.hasEndAlarm = hasEndAlarm;
     }
 }

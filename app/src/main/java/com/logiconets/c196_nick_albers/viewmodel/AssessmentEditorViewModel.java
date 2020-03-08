@@ -42,19 +42,20 @@ public class AssessmentEditorViewModel extends AndroidViewModel {
         });
     }
 
-    public void saveAssessment(String AssessmentText,String type,Date dueDate,int courseId) {
+    public void saveAssessment(String AssessmentText,String type,Date dueDate,int courseId, boolean hasAlarm) {
         AssessmentEntity assessment = mLiveAssessment.getValue();
 
         if(assessment == null){
             if(TextUtils.isEmpty(AssessmentText.trim())){
                 return;
             }
-            assessment = new AssessmentEntity(AssessmentText.trim(),type,dueDate,courseId);
+            assessment = new AssessmentEntity(AssessmentText.trim(),type,dueDate,courseId, hasAlarm);
         }else{
             assessment.setTitle(AssessmentText.trim());
             assessment.setDueDate(dueDate);
             assessment.setAssessType(type);
             assessment.setCourseId(courseId);
+            assessment.setHasAlarm(hasAlarm);
         }
         mRepository.insertAssessment(assessment);
     }

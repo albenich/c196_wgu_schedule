@@ -87,7 +87,9 @@ public class CourseEditorActivity extends AppCompatActivity {
 
     private CourseEditorViewModel mViewModel;
 
-    AlarmController alarmController;
+    AlarmController startAlarmController;
+    AlarmController endAlarmController;
+
     private int startAlarmNotificationId;
     private int endAlarmNotificationId;
 
@@ -169,6 +171,8 @@ public class CourseEditorActivity extends AppCompatActivity {
                 mTermCombo.setSelection(mViewModel.getTermIdPosition(mTermId));
                 startAlarmNotificationId = courseEntity.getTermId() * 1000 + courseEntity.getCourseId() *10;
                 endAlarmNotificationId = courseEntity.getTermId() * 1000 + courseEntity.getCourseId() *10 + 1;
+                mStartAlarm.setChecked(courseEntity.getHasStartAlarm());
+                mEndAlarm.setChecked(courseEntity.getHasEndAlarm());
             });
         }mViewModel.isPopulated = true;
     }
@@ -231,7 +235,8 @@ public class CourseEditorActivity extends AppCompatActivity {
             Log.i("CourseEditor", "Selected TermId = " + mTermId);
             mViewModel.saveCourse(mTitle.getText().toString(), convertStrToDate(mStartDate.getText().toString()),
                     convertStrToDate(mEndDate.getText().toString()), mStatusCombo.getSelectedItem().toString(), mCmName.getText().toString(),
-                    mCmEmail.getText().toString(), mCmPhone.getText().toString(), mNotes.getText().toString(), mTermId);
+                    mCmEmail.getText().toString(), mCmPhone.getText().toString(), mNotes.getText().toString(), mTermId,mStartAlarm.isChecked(),
+                    mEndAlarm.isChecked());
             Toast.makeText(this, "Course Saved", Toast.LENGTH_SHORT);
             setAlarms();
             finish();
@@ -240,22 +245,22 @@ public class CourseEditorActivity extends AppCompatActivity {
 
     private void setAlarms() {
         Log.i("CourseEditor","StartAlarmNotification " + startAlarmNotificationId);
+        startAlarmController = new AlarmController("Start of " + mTitle.getText()
+                , convertStrToDate(mStartDate.getText().toString()), startAlarmNotificationId, this);
         if (mStartAlarm.isChecked()) {
-            alarmController = new AlarmController("Start of " + mTitle.getText()
-                    , convertStrToDate(mStartDate.getText().toString()), startAlarmNotificationId, this);
-            alarmController.setAlarm();
+            startAlarmController.setAlarm();
         } else {
-            alarmController.cancelAlarm();
+            startAlarmController.cancelAlarm();
         }
         Log.i("CourseEditor","EndAlarmNotification " + endAlarmNotificationId);
 
+        endAlarmController = new AlarmController("End of " + mTitle.getText()
+                , convertStrToDate(mEndDate.getText().toString()), endAlarmNotificationId, this);
         if(mEndAlarm.isChecked()){
-            alarmController = new AlarmController("End of " + mTitle.getText()
-                    , convertStrToDate(mEndDate.getText().toString()), endAlarmNotificationId, this);
-            alarmController.setAlarm();
+            endAlarmController.setAlarm();
         }
         else{
-            alarmController.cancelAlarm();
+            endAlarmController.cancelAlarm();
         }
     }
 /*

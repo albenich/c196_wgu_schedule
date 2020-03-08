@@ -3,6 +3,7 @@ package com.logiconets.c196_nick_albers.database;
 import androidx.room.ColumnInfo;
 import androidx.room.Embedded;
 import androidx.room.Relation;
+import androidx.room.Transaction;
 
 import com.logiconets.c196_nick_albers.database.CourseEntity;
 import com.logiconets.c196_nick_albers.database.TermEntity;

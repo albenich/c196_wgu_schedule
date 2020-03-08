@@ -45,11 +45,11 @@ public class PopulateData {
         startCourse.set(2020,3,1);
         endCourse.set(2020,6,25);
         CourseEntity c1 = new CourseEntity(1,"C856 User Experience Design",startCourse.getTime(),endCourse.getTime(),"In Progress"
-                ,"Dana","615-808-3843","dana.cobbs@wgu.edu","",1);
+                ,"Dana","615-808-3843","dana.cobbs@wgu.edu","",1,false,false);
         CourseEntity c2 = new CourseEntity(2,"C196 Mobile Applications",startCourse.getTime(),endCourse.getTime(),"In Progress"
-                ,"Wanda","385-428-8723","wanda.burwick@wgu.edu","",2);
+                ,"Wanda","385-428-8723","wanda.burwick@wgu.edu","",2,false,false);
         CourseEntity c3 = new CourseEntity(3,"C195 Software II",startCourse.getTime(),endCourse.getTime(),"In Progress"
-                ,"Wanda","385-428-8723","wanda.burwick@wgu.edu","",2);
+                ,"Wanda","385-428-8723","wanda.burwick@wgu.edu","",2,false,false);
 
         if(courses.isEmpty())
             courses.add(c1);
@@ -61,10 +61,10 @@ public class PopulateData {
         Calendar dueDate = GregorianCalendar.getInstance();
 
         dueDate.set(2020,6,25);
-        AssessmentEntity a1 = new AssessmentEntity("C856 Project","Performance",dueDate.getTime(),1);
-        AssessmentEntity a2 = new AssessmentEntity("C196 Mobile App","Objective",dueDate.getTime(),2);
-        AssessmentEntity a3 = new AssessmentEntity("Java Application","Performance",dueDate.getTime(),3);
-        AssessmentEntity a4 = new AssessmentEntity("Oracle Java Developer","Objective",dueDate.getTime(),3);
+        AssessmentEntity a1 = new AssessmentEntity("C856 Project","Performance",dueDate.getTime(),1,false);
+        AssessmentEntity a2 = new AssessmentEntity("C196 Mobile App","Objective",dueDate.getTime(),2,false);
+        AssessmentEntity a3 = new AssessmentEntity("Java Application","Performance",dueDate.getTime(),3,false);
+        AssessmentEntity a4 = new AssessmentEntity("Oracle Java Developer","Objective",dueDate.getTime(),3,false);
 
         if(assessments.isEmpty())
             assessments.add(a1);

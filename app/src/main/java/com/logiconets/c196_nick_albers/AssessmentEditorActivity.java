@@ -119,6 +119,7 @@ public class AssessmentEditorActivity extends AppCompatActivity {
                 // mCourseId.setText(String.valueOf(assessmentEntity.getCourseId()));
                 mCourseId = assessmentEntity.getCourseId();
                 notificationId = mCourseId + 20000 + mViewModel.mLiveAssessment.getValue().getAssessmentId();
+                mAlarmSwitch.setChecked(assessmentEntity.getHasAlarm());
             });
         }mViewModel.isPopulated = true;
 
@@ -171,16 +172,16 @@ public class AssessmentEditorActivity extends AppCompatActivity {
         }
         else {
             mViewModel.saveAssessment(mTitle.getText().toString(), typeString,
-                    convertStrToDate(mDueDate.getText().toString()), mCourseId);
+                    convertStrToDate(mDueDate.getText().toString()), mCourseId,mAlarmSwitch.isChecked());
             Toast.makeText(this, "Assessment Saved", Toast.LENGTH_SHORT);
             finish();
         }
     }
     @OnClick(R.id.assessment_alarmSwitch)
     public void onClickAlarmSwitch(){
+        alarmController = new AlarmController("Assessment: " + mTitle.getText().toString(),
+                convertStrToDate(mDueDate.getText().toString()),notificationId,this);
         if(mAlarmSwitch.isChecked()){
-            alarmController = new AlarmController("Assessment: " + mTitle.getText().toString(),
-                    convertStrToDate(mDueDate.getText().toString()),notificationId,this);
             alarmController.setAlarm();
         }
         else{
