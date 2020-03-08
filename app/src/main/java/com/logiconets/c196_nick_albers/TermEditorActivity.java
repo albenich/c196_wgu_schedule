@@ -66,10 +66,19 @@ public class TermEditorActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ButterKnife.bind(this);
-
+        Log.i("TermEditor", "TermEditor has run through onCreate");
         initViewModel();
 
     }
+
+    @Override
+    public void onResume()
+    {  // After a pause OR at startup
+        super.onResume();
+        //Refresh your stuff here
+        initViewModel();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_term_editor, menu);
@@ -122,7 +131,8 @@ public class TermEditorActivity extends AppCompatActivity {
                 if(!isNew) {
                     Log.i("TermEditor","mLiveTerm has " + mViewModel.mLiveTerm.getValue().getCourses().size() + " courses" );
                     if (mViewModel.mLiveTerm.getValue().getCourses().size() > 0) {
-                        Toast.makeText(this, "Unable to delete a Term with Courses added", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Term has " + mViewModel.mLiveTerm.getValue().getCourses().toString() +
+                                " Courses.\nUnable to delete a Term with Courses added", Toast.LENGTH_LONG).show();
                     } else {
                         mViewModel.confirmDelete(this, mViewModel.mLiveTerm.getValue().getTerm());
                     }
